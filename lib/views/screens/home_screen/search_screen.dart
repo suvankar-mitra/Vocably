@@ -90,12 +90,8 @@ class _SearchScreenState extends State<SearchScreen> {
           Align(
             alignment: Alignment.center,
             child: Opacity(
-              opacity: 0.8,
-              child: SizedBox(
-                height: 300,
-                width: 300,
-                child: Lottie.asset('assets/lottie/lottie_floating_book_blue.json'),
-              ),
+              opacity: 0.6,
+              child: SizedBox(height: 300, width: 300, child: Lottie.asset('assets/lottie/lottie_book_flying_bw.json')),
             ),
           ),
           SingleChildScrollView(
@@ -148,10 +144,23 @@ class _SearchScreenState extends State<SearchScreen> {
                                         // color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                                         color: AppColors.searchBarHintColor,
                                       ),
-                                      suffixIcon: Icon(
-                                        HugeIcons.strokeRoundedBook02,
-                                        color: AppColors.searchBarHintColor,
-                                      ),
+                                      suffixIcon:
+                                          _controller.text.isNotEmpty
+                                              ? GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    _controller.clear();
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  HugeIcons.strokeRoundedCancel01,
+                                                  color: AppColors.secondaryAccentColor,
+                                                ),
+                                              )
+                                              : Icon(
+                                                HugeIcons.strokeRoundedBook02,
+                                                color: AppColors.searchBarHintColor,
+                                              ),
                                       filled: false,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(16.0),
