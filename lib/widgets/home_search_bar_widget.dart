@@ -35,7 +35,7 @@ class HomeSearchBarWidget extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search a word or phrase ...',
-                  hintStyle: GoogleFonts.roboto(fontSize: 16.0, color: AppColors.searchBarHintColor),
+                  hintStyle: GoogleFonts.poppins(fontSize: 16.0, color: AppColors.searchBarHintColor),
                   suffixIcon: Icon(HugeIcons.strokeRoundedBook02, color: AppColors.secondaryAccentColor),
                   filled: false,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0), borderSide: BorderSide.none),

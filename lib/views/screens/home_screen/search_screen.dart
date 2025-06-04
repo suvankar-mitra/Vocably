@@ -98,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 48, 24, 0),
+                  padding: const EdgeInsets.fromLTRB(24, 64, 24, 0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColors.searchBarBackground,
@@ -132,14 +132,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: TextField(
                                     controller: _controller,
                                     // autofocus: true,
-                                    style: GoogleFonts.roboto(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 16.0,
                                       color: Theme.of(context).textTheme.bodyMedium?.color,
                                     ),
                                     textInputAction: TextInputAction.search,
                                     decoration: InputDecoration(
                                       hintText: 'Search a word or phrase ...',
-                                      hintStyle: GoogleFonts.roboto(
+                                      hintStyle: GoogleFonts.poppins(
                                         fontSize: 16.0,
                                         // color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                                         color: AppColors.searchBarHintColor,
@@ -186,21 +186,24 @@ class _SearchScreenState extends State<SearchScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     if (index == 0)
-                                      Row(
-                                        children: [
-                                          Expanded(child: Divider(thickness: 1)),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                            child: Text(
-                                              'SEARCH SUGGESTIONS',
-                                              style: GoogleFonts.roboto(
-                                                fontWeight: FontWeight.w200,
-                                                color: AppColors.secondaryTextColor,
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 12.0, left: 12.0),
+                                        child: Row(
+                                          children: [
+                                            // Expanded(child: Divider(thickness: 1)),
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 8.0),
+                                              child: Text(
+                                                'Search Suggestions',
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColors.secondaryTextColor.withValues(alpha: 0.5),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(child: Divider(thickness: 1)),
-                                        ],
+                                            Expanded(child: Divider(thickness: 1)),
+                                          ],
+                                        ),
                                       ),
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
@@ -217,7 +220,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               RichText(
                                                 text: TextSpan(
                                                   text: suggestion,
-                                                  style: GoogleFonts.roboto(color: AppColors.primaryTextColor),
+                                                  style: GoogleFonts.poppins(color: AppColors.primaryTextColor),
                                                 ),
                                               ),
                                             ],
@@ -258,7 +261,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Center(
                       child: Column(
                         children: [
-                          Text('Error: $_error', style: GoogleFonts.roboto(color: Colors.red)),
+                          Text('Error: $_error', style: GoogleFonts.poppins(color: Colors.red)),
                           SizedBox(
                             height: 100,
                             width: 100,
@@ -277,7 +280,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           Text(
                             'Oops! No results found for "${_controller.text}"',
-                            style: GoogleFonts.roboto(color: AppColors.secondaryTextColor),
+                            style: GoogleFonts.poppins(color: AppColors.secondaryTextColor),
                           ),
                           SizedBox(
                             height: 100,
@@ -301,7 +304,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           children: [
                             Text(
                               'Recent searches',
-                              style: GoogleFonts.roboto(
+                              style: GoogleFonts.poppins(
                                 color: AppColors.primaryTextColor,
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -312,7 +315,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               child: RichText(
                                 text: TextSpan(
                                   text: 'Clear',
-                                  style: GoogleFonts.roboto(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16,
                                     color: AppColors.secondaryAccentColor,
@@ -359,7 +362,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             RichText(
                                               text: TextSpan(
                                                 text: recent,
-                                                style: GoogleFonts.roboto(color: AppColors.primaryTextColor),
+                                                style: GoogleFonts.poppins(color: AppColors.primaryTextColor),
                                               ),
                                             ),
                                           ],

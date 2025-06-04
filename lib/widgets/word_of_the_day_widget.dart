@@ -53,11 +53,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
           children: [
             Text(
               'Word of the day',
-              style: GoogleFonts.robotoSlab(
-                fontWeight: FontWeight.bold,
-                color: AppColors.appTitleColor,
-                fontSize: 16.0,
-              ),
+              style: GoogleFonts.playfair(fontWeight: FontWeight.bold, color: AppColors.appTitleColor, fontSize: 22.0),
             ),
             const SizedBox(height: 8.0),
             Row(
@@ -82,7 +78,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           child: Center(
                             child: Column(
                               children: [
-                                Text('Error: ${snapshot.error}', style: GoogleFonts.roboto(color: Colors.red)),
+                                Text('Error: ${snapshot.error}', style: GoogleFonts.poppins(color: Colors.red)),
                                 SizedBox(
                                   height: 100,
                                   width: 100,
@@ -100,7 +96,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           child: Center(
                             child: Column(
                               children: [
-                                Text('No words found', style: GoogleFonts.roboto(color: AppColors.secondaryTextColor)),
+                                Text('No words found', style: GoogleFonts.poppins(color: AppColors.secondaryTextColor)),
                                 SizedBox(
                                   height: 100,
                                   width: 100,
@@ -192,7 +188,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                   RichText(
                                     text: TextSpan(
                                       text: 'Learn more',
-                                      style: GoogleFonts.robotoSlab(
+                                      style: GoogleFonts.playfair(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 16,
                                         color: AppColors.secondaryAccentColor,
