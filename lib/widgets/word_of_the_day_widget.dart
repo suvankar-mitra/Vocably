@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
@@ -58,6 +59,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                 fontSize: 16.0,
               ),
             ),
+            const SizedBox(height: 8.0),
             Row(
               children: [
                 Expanded(
@@ -65,14 +67,49 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                     future: service.getWordOfTheDay(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Center(
+                          child: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Lottie.asset('assets/lottie/lottie_wait_animation_blue.json'),
+                          ),
+                        );
                       }
                       if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
+                        // return Center(child: Text('Error: ${snapshot.error}'));
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text('Error: ${snapshot.error}', style: GoogleFonts.roboto(color: Colors.red)),
+                                SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Lottie.asset('assets/lottie/lottie_nothing_found_blue.json'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       }
                       final entry = snapshot.data;
                       if (entry == null) {
-                        return const Center(child: Text('No data found.'));
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text('No words found', style: GoogleFonts.roboto(color: AppColors.secondaryTextColor)),
+                                SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Lottie.asset('assets/lottie/lottie_nothing_found_blue.json'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       }
 
                       return Padding(
@@ -92,11 +129,34 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                             const SizedBox(height: 5.0),
                             Row(
                               children: [
-                                Text(
-                                  ('${entry.meanings?.first.partOfSpeech ?? ''} • ${entry.ipa ?? ''}').trim(),
-                                  style: GoogleFonts.merriweather(fontSize: 16.0, color: AppColors.secondaryTextColor),
-                                ),
-                                const SizedBox(width: 8.0),
+                                if ((entry.meanings?.first.partOfSpeech ?? '').isNotEmpty)
+                                  Row(
+                                    children: [
+                                      Text(
+                                        entry.meanings?.first.partOfSpeech ?? '',
+                                        style: GoogleFonts.merriweather(
+                                          fontSize: 16.0,
+                                          color: AppColors.secondaryTextColor,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                    ],
+                                  ),
+
+                                if ((entry.ipa ?? '').isNotEmpty)
+                                  Row(
+                                    children: [
+                                      Text(
+                                        (entry.ipa ?? '').trim(),
+                                        style: GoogleFonts.merriweather(
+                                          fontSize: 16.0,
+                                          color: AppColors.secondaryTextColor,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                    ],
+                                  ),
+
                                 if ((entry.audioUrl ?? '').isNotEmpty)
                                   InkWell(
                                     onTap: () {

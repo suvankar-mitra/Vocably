@@ -22,12 +22,12 @@ class DictionaryApiService {
   }
 
   Future<WordEntryDTO> getWordOfTheDay() async {
-    return getDefinition('oblique');
+    return getDefinition('deduct');
   }
 
   Future<List<String>> getListWordsByFilter(String filter) async {
     try {
-      final response = await _dio.get('/words/en?', queryParameters: {'filter': filter, 'size': '12'});
+      final response = await _dio.get('/words/en?', queryParameters: {'filter': filter, 'size': '3'});
       // Assuming the API returns a JSON array of strings
       return (response.data as List<dynamic>).cast<String>();
     } on DioException catch (e) {

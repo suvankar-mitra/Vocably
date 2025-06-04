@@ -3,6 +3,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:vocably/themes/app_colors.dart';
 import 'package:vocably/views/screens/bookmark_page.dart';
 import 'package:vocably/views/screens/home_screen/home_screen.dart';
+import 'package:vocably/views/screens/settings_page.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -14,7 +15,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[HomeScreen(), BookmarkPage()];
+  static const List<Widget> _widgetOptions = <Widget>[HomeScreen(), BookmarkPage(), SettingsPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -50,6 +51,17 @@ class _LandingPageState extends State<LandingPage> {
             ), // Replace with your actual icons
             selectedIcon: Icon(
               HugeIcons.strokeRoundedBookBookmark01,
+              color: AppColors.activeNavIconColor,
+            ), // Optional: different icon when selected
+            label: '',
+          ),
+          NavigationDestination(
+            icon: Icon(
+              HugeIcons.strokeRoundedSettings01,
+              color: AppColors.inactiveNavIconColor,
+            ), // Replace with your actual icons
+            selectedIcon: Icon(
+              HugeIcons.strokeRoundedSettings01,
               color: AppColors.activeNavIconColor,
             ), // Optional: different icon when selected
             label: '',

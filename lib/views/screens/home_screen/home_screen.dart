@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -48,16 +48,11 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // Search bar
-              Padding(padding: const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0), child: HomeSearchBarWidget()),
-              const SizedBox(height: 30.0),
+              Padding(padding: const EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0), child: HomeSearchBarWidget()),
+              const SizedBox(height: 10.0),
               // Word of the day widget
               Padding(padding: const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0), child: WordOfTheDayWidget()),
               const SizedBox(height: 30.0),
-              SizedBox(
-                width: 200.0,
-                height: 200.0,
-                child: Opacity(opacity: 0.3, child: Lottie.asset('assets/lottie/lottie_book_flying_bw.json')),
-              ),
             ],
           ),
         ),
