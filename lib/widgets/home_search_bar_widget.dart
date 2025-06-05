@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -32,13 +33,30 @@ class HomeSearchBarWidget extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: IgnorePointer(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search a word or phrase ...',
-                  hintStyle: GoogleFonts.poppins(fontSize: 16.0, color: AppColors.searchBarHintColor),
-                  suffixIcon: Icon(HugeIcons.strokeRoundedBook02, color: AppColors.secondaryAccentColor),
-                  filled: false,
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0), borderSide: BorderSide.none),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: Row(
+                  children: [
+                    Icon(HugeIcons.strokeRoundedSearch01, color: AppColors.searchBarHintColor, size: 14.0),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          TyperAnimatedText(
+                            'Search a word or phrase',
+                            textStyle: GoogleFonts.poppins(fontSize: 14.0, color: AppColors.searchBarHintColor),
+                            speed: const Duration(milliseconds: 100),
+                          ),
+                        ],
+                        repeatForever: true,
+                        isRepeatingAnimation: true,
+                        pause: const Duration(milliseconds: 2000),
+                        displayFullTextOnTap: true,
+                        stopPauseOnTap: true,
+                      ),
+                    ),
+                    Icon(HugeIcons.strokeRoundedBook02, color: AppColors.secondaryAccentColor),
+                  ],
                 ),
               ),
             ),

@@ -1,8 +1,10 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vocably/animations/colorized_no_fade_animated_text.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
@@ -16,12 +18,21 @@ class WordOfTheDayWidget extends StatefulWidget {
 
 class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
   late AudioPlayer _audioPlayer;
+  late Future<WordEntryDTO> _wordOfTheDayFuture;
+  final DictionaryApiService _service = DictionaryApiService();
 
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer(); // Initialize in initState
     _audioPlayer.setReleaseMode(ReleaseMode.stop); // Stop audio when widget is disposed
+    _wordOfTheDayFuture = _service.getWordOfTheDay();
+  }
+
+  void _retry() {
+    setState(() {
+      _wordOfTheDayFuture = _service.getWordOfTheDay();
+    });
   }
 
   @override
@@ -32,7 +43,6 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DictionaryApiService service = DictionaryApiService();
     return Container(
       decoration: BoxDecoration(
         color: AppColors.cardBackgroundColor,
@@ -51,16 +61,31 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
-              'Word of the day',
-              style: GoogleFonts.playfair(fontWeight: FontWeight.bold, color: AppColors.appTitleColor, fontSize: 22.0),
+            AnimatedTextKit(
+              animatedTexts: [
+                ColorizeNoFadeAnimatedText(
+                  'Word of the day',
+                  textStyle: GoogleFonts.playfair(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.appTitleColor,
+                    fontSize: 24.0,
+                  ),
+                  colors: [AppColors.primaryAccentColor, AppColors.secondaryAccentColor, AppColors.primaryAccentColor],
+                  speed: Duration(milliseconds: 1000),
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+              // isRepeatingAnimation: true,
+              repeatForever: true,
+              onTap: () {},
             ),
+
             const SizedBox(height: 8.0),
             Row(
               children: [
                 Expanded(
                   child: FutureBuilder<WordEntryDTO>(
-                    future: service.getWordOfTheDay(),
+                    future: _wordOfTheDayFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Center(
@@ -78,11 +103,21 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           child: Center(
                             child: Column(
                               children: [
-                                Text('Error: ${snapshot.error}', style: GoogleFonts.poppins(color: Colors.red)),
+                                Text(
+                                  'Oops! something went wrong while fetching word of the day.',
+                                  style: GoogleFonts.poppins(color: Colors.red),
+                                ),
                                 SizedBox(
                                   height: 100,
                                   width: 100,
                                   child: Lottie.asset('assets/lottie/lottie_nothing_found_blue.json'),
+                                ),
+                                FilledButton(
+                                  onPressed: _retry,
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStateProperty.all(AppColors.secondaryAccentColor),
+                                  ),
+                                  child: Text('Retry', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
                                 ),
                               ],
                             ),
@@ -135,7 +170,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                           color: AppColors.secondaryTextColor,
                                         ),
                                       ),
-                                      const SizedBox(width: 8.0),
+                                      const SizedBox(width: 4.0),
+                                      Text('•'),
+                                      const SizedBox(width: 4.0),
                                     ],
                                   ),
 
@@ -149,7 +186,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                           color: AppColors.secondaryTextColor,
                                         ),
                                       ),
-                                      const SizedBox(width: 8.0),
+                                      const SizedBox(width: 4.0),
+                                      Text('•'),
+                                      const SizedBox(width: 4.0),
                                     ],
                                   ),
 
@@ -183,23 +222,41 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                             InkWell(
                               onTap: () {},
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Learn more',
-                                      style: GoogleFonts.playfair(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        color: AppColors.secondaryAccentColor,
+                                  // RichText(
+                                  //   text: TextSpan(
+                                  //     text: 'Learn more',
+                                  //     style: GoogleFonts.poppins(
+                                  //       fontWeight: FontWeight.w700,
+                                  //       fontSize: 15,
+                                  //       color: AppColors.secondaryAccentColor,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  AnimatedTextKit(
+                                    animatedTexts: [
+                                      ColorizeNoFadeAnimatedText(
+                                        'Learn more',
+                                        textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 15),
+                                        colors: [
+                                          AppColors.primaryAccentColor,
+                                          AppColors.secondaryAccentColor,
+                                          AppColors.primaryAccentColor,
+                                        ],
+                                        speed: Duration(milliseconds: 1000),
+                                        textAlign: TextAlign.justify,
                                       ),
-                                    ),
+                                    ],
+                                    // isRepeatingAnimation: true,
+                                    repeatForever: true,
+                                    onTap: () {},
                                   ),
                                   const SizedBox(width: 8.0),
                                   Icon(
                                     HugeIcons.strokeRoundedArrowRight02,
                                     color: AppColors.secondaryAccentColor,
-                                    size: 16,
+                                    size: 18,
                                   ),
                                 ],
                               ),
