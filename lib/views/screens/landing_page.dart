@@ -25,48 +25,50 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        backgroundColor: AppColors.bottomNavBackground,
-        indicatorColor: Colors.transparent,
-        destinations: const <NavigationDestination>[
-          NavigationDestination(
-            icon: Icon(
-              HugeIcons.strokeRoundedHome01,
-              color: AppColors.inactiveNavIconColor,
-            ), // Replace with your actual icons
-            selectedIcon: Icon(
-              HugeIcons.strokeRoundedHome01,
-              color: AppColors.activeNavIconColor,
-            ), // Optional: different icon when selected
-            label: '',
-          ),
-          NavigationDestination(
-            icon: Icon(
-              HugeIcons.strokeRoundedBookBookmark01,
-              color: AppColors.inactiveNavIconColor,
-            ), // Replace with your actual icons
-            selectedIcon: Icon(
-              HugeIcons.strokeRoundedBookBookmark01,
-              color: AppColors.activeNavIconColor,
-            ), // Optional: different icon when selected
-            label: '',
-          ),
-          NavigationDestination(
-            icon: Icon(
-              HugeIcons.strokeRoundedSettings01,
-              color: AppColors.inactiveNavIconColor,
-            ), // Replace with your actual icons
-            selectedIcon: Icon(
-              HugeIcons.strokeRoundedSettings01,
-              color: AppColors.activeNavIconColor,
-            ), // Optional: different icon when selected
-            label: '',
-          ),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: _onItemTapped,
+          backgroundColor: AppColors.bottomNavBackground,
+          indicatorColor: Colors.transparent,
+          destinations: const <NavigationDestination>[
+            NavigationDestination(
+              icon: Icon(
+                HugeIcons.strokeRoundedHome01,
+                color: AppColors.inactiveNavIconColor,
+              ), // Replace with your actual icons
+              selectedIcon: Icon(
+                HugeIcons.strokeRoundedHome01,
+                color: AppColors.activeNavIconColor,
+              ), // Optional: different icon when selected
+              label: '',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                HugeIcons.strokeRoundedBookBookmark01,
+                color: AppColors.inactiveNavIconColor,
+              ), // Replace with your actual icons
+              selectedIcon: Icon(
+                HugeIcons.strokeRoundedBookBookmark01,
+                color: AppColors.activeNavIconColor,
+              ), // Optional: different icon when selected
+              label: '',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                HugeIcons.strokeRoundedSettings01,
+                color: AppColors.inactiveNavIconColor,
+              ), // Replace with your actual icons
+              selectedIcon: Icon(
+                HugeIcons.strokeRoundedSettings01,
+                color: AppColors.activeNavIconColor,
+              ), // Optional: different icon when selected
+              label: '',
+            ),
+          ],
+        ),
       ),
     );
   }
