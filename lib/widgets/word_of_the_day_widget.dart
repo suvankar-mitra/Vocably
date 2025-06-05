@@ -58,7 +58,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             AnimatedTextKit(
@@ -68,7 +68,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                   textStyle: GoogleFonts.playfair(
                     fontWeight: FontWeight.bold,
                     color: AppColors.appTitleColor,
-                    fontSize: 24.0,
+                    fontSize: 22.0,
                   ),
                   colors: [AppColors.primaryAccentColor, AppColors.secondaryAccentColor, AppColors.primaryAccentColor],
                   speed: Duration(milliseconds: 1000),
@@ -216,49 +216,6 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                   height: 1.5,
                                   color: Theme.of(context).textTheme.bodyLarge?.color,
                                 ),
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            InkWell(
-                              onTap: () {},
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // RichText(
-                                  //   text: TextSpan(
-                                  //     text: 'Learn more',
-                                  //     style: GoogleFonts.poppins(
-                                  //       fontWeight: FontWeight.w700,
-                                  //       fontSize: 15,
-                                  //       color: AppColors.secondaryAccentColor,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  AnimatedTextKit(
-                                    animatedTexts: [
-                                      ColorizeNoFadeAnimatedText(
-                                        'Learn more',
-                                        textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 15),
-                                        colors: [
-                                          AppColors.primaryAccentColor,
-                                          AppColors.secondaryAccentColor,
-                                          AppColors.primaryAccentColor,
-                                        ],
-                                        speed: Duration(milliseconds: 1000),
-                                        textAlign: TextAlign.justify,
-                                      ),
-                                    ],
-                                    // isRepeatingAnimation: true,
-                                    repeatForever: true,
-                                    onTap: () {},
-                                  ),
-                                  const SizedBox(width: 8.0),
-                                  Icon(
-                                    HugeIcons.strokeRoundedArrowRight02,
-                                    color: AppColors.secondaryAccentColor,
-                                    size: 18,
-                                  ),
-                                ],
                               ),
                             ),
                           ],
