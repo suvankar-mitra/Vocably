@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: AppConstants.APP_NAME,
+                            text: AppConstants.appName,
                             style: GoogleFonts.playfairDisplay(
                               fontSize: Theme.of(context).textTheme.displayMedium?.fontSize,
                               fontWeight: FontWeight.bold,
