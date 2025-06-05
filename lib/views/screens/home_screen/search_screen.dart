@@ -19,7 +19,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
   List<String> _suggestions = [];
-  List<String> _recents = [];
+  final List<String> _recents = [];
   bool _loading = false;
   String? _error;
   late String _query;
@@ -86,14 +86,18 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: AppColors.backgroundColor,
       body: Stack(
         children: [
-          // if (_controller.text.isEmpty)
-          Align(
-            alignment: Alignment.center,
-            child: Opacity(
-              opacity: 0.6,
-              child: SizedBox(height: 300, width: 300, child: Lottie.asset('assets/lottie/lottie_book_flying_bw.json')),
+          if (_controller.text.isEmpty)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Opacity(
+                opacity: 0.6,
+                child: SizedBox(
+                  height: 150,
+                  width: 150,
+                  child: Lottie.asset('assets/lottie/lottie_book_flying_bw.json'),
+                ),
+              ),
             ),
-          ),
           SingleChildScrollView(
             child: Column(
               children: [
@@ -132,15 +136,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: TextField(
                                     controller: _controller,
                                     // autofocus: true,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16.0,
-                                      color: Theme.of(context).textTheme.bodyMedium?.color,
-                                    ),
+                                    style: GoogleFonts.poppins(fontSize: 16.0, color: AppColors.primaryTextColor),
                                     textInputAction: TextInputAction.search,
                                     decoration: InputDecoration(
-                                      hintText: 'Search a word or phrase ...',
+                                      hintText: 'Search a word or phrase',
                                       hintStyle: GoogleFonts.poppins(
-                                        fontSize: 16.0,
+                                        fontSize: 14.0,
                                         // color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
                                         color: AppColors.searchBarHintColor,
                                       ),
@@ -213,8 +214,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                           Row(
                                             children: [
                                               Icon(
-                                                HugeIcons.strokeRoundedSearchList01,
+                                                HugeIcons.strokeRoundedSearch01,
                                                 color: AppColors.secondaryTextColor.withValues(alpha: 0.5),
+                                                size: 14.0,
                                               ),
                                               const SizedBox(width: 12.0),
                                               RichText(
@@ -357,6 +359,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             Icon(
                                               HugeIcons.strokeRoundedClock04,
                                               color: AppColors.secondaryTextColor.withValues(alpha: 0.5),
+                                              size: 14.0,
                                             ),
                                             const SizedBox(width: 12.0),
                                             RichText(
