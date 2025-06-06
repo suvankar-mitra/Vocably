@@ -179,7 +179,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(builder: (context) => DefinitionScreen(word: wordToSearch)),
                                         );
-                                        // Navigator.of(context).pop();
                                       },
                                     ),
                                   ),
