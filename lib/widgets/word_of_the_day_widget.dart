@@ -8,6 +8,7 @@ import 'package:vocably/animations/colorized_no_fade_animated_text.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
+import 'package:vocably/widgets/bouncable_wrapper_widget.dart';
 
 class WordOfTheDayWidget extends StatefulWidget {
   const WordOfTheDayWidget({super.key});
@@ -50,9 +51,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.2),
-            spreadRadius: 1,
-            blurRadius: 3,
+            color: Colors.grey.withValues(alpha: 0.3),
+            spreadRadius: 3,
+            blurRadius: 5,
             offset: const Offset(0, 1),
           ),
         ],
@@ -61,6 +62,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            //
             AnimatedTextKit(
               animatedTexts: [
                 ColorizeNoFadeAnimatedText(
@@ -68,7 +70,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                   textStyle: GoogleFonts.playfair(
                     fontWeight: FontWeight.bold,
                     color: AppColors.appTitleColor,
-                    fontSize: 22.0,
+                    fontSize: 20.0,
                   ),
                   colors: [AppColors.primaryAccentColor, AppColors.secondaryAccentColor, AppColors.primaryAccentColor],
                   speed: Duration(milliseconds: 1000),
@@ -80,7 +82,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
               onTap: () {},
             ),
 
-            const SizedBox(height: 8.0),
+            // const SizedBox(height: 8.0),
             Row(
               children: [
                 Expanded(
@@ -144,20 +146,22 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                       }
 
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // word
                             Text(
                               entry.word ?? '',
                               style: GoogleFonts.merriweather(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 26.0,
+                                fontSize: 22.0,
                                 color: AppColors.primaryTextColor,
                               ),
                             ),
                             const SizedBox(height: 5.0),
+                            // phonetic details
                             Row(
                               children: [
                                 if ((entry.meanings?.first.partOfSpeech ?? '').isNotEmpty)
@@ -166,43 +170,48 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                       Text(
                                         entry.meanings?.first.partOfSpeech ?? '',
                                         style: GoogleFonts.merriweather(
-                                          fontSize: 16.0,
+                                          fontSize: 14.0,
                                           color: AppColors.secondaryTextColor,
                                         ),
                                       ),
-                                      const SizedBox(width: 4.0),
-                                      Text('•'),
-                                      const SizedBox(width: 4.0),
                                     ],
                                   ),
 
                                 if ((entry.ipa ?? '').isNotEmpty)
                                   Row(
                                     children: [
-                                      Text(
-                                        (entry.ipa ?? '').trim(),
-                                        style: GoogleFonts.merriweather(
-                                          fontSize: 16.0,
-                                          color: AppColors.secondaryTextColor,
-                                        ),
-                                      ),
                                       const SizedBox(width: 4.0),
                                       Text('•'),
                                       const SizedBox(width: 4.0),
+                                      Text(
+                                        (entry.ipa ?? '').trim(),
+                                        style: GoogleFonts.merriweather(
+                                          fontSize: 14.0,
+                                          color: AppColors.secondaryTextColor,
+                                        ),
+                                      ),
                                     ],
                                   ),
 
                                 if ((entry.audioUrl ?? '').isNotEmpty)
-                                  InkWell(
-                                    onTap: () {
-                                      // play the media if available
-                                      String mediaUrl = entry.audioUrl ?? '';
-                                      _playAudio(mediaUrl);
-                                    },
-                                    child: Icon(
-                                      HugeIcons.strokeRoundedVolumeHigh,
-                                      color: AppColors.secondaryAccentColor,
-                                    ),
+                                  Row(
+                                    children: [
+                                      const SizedBox(width: 4.0),
+                                      Text('•'),
+                                      const SizedBox(width: 4.0),
+                                      InkWell(
+                                        onTap: () {
+                                          // play the media if available
+                                          String mediaUrl = entry.audioUrl ?? '';
+                                          _playAudio(mediaUrl);
+                                        },
+                                        child: Icon(
+                                          HugeIcons.strokeRoundedVolumeHigh,
+                                          color: AppColors.secondaryAccentColor,
+                                          size: 14.0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                               ],
                             ),
@@ -218,6 +227,41 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                 ),
                               ),
                             ),
+                            // Learn more button
+                            const SizedBox(height: 10.0),
+                            InkWell(
+                              onTap: () {
+                                // Navigate to the details page or perform any action
+                                // For now, just show a snackbar
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text('View more details about $entry')));
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Learn more',
+                                    style: GoogleFonts.poppins(
+                                      color: AppColors.secondaryAccentColor,
+                                      fontSize: 14.0,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppColors.secondaryAccentColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  BouncableWrapperWidget(
+                                    leftToRight: true,
+                                    child: Icon(
+                                      HugeIcons.strokeRoundedArrowRight02,
+                                      color: AppColors.secondaryAccentColor,
+                                      size: 16.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 4.0),
                           ],
                         ),
                       );
