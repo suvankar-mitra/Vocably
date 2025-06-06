@@ -19,7 +19,7 @@ class WeeklySearchLineChart extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, _) {
-                const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+                const days = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', ];
                 return Text(
                   days[value.toInt()],
                   style: GoogleFonts.poppins(color: Colors.grey[700], fontWeight: FontWeight.w600, fontSize: 10),
@@ -42,6 +42,19 @@ class WeeklySearchLineChart extends StatelessWidget {
           ),
         ),
         borderData: FlBorderData(show: false),
+        lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            getTooltipColor: (touchedSpot) => _getColor(),
+            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+              return touchedSpots.map((spot) {
+                return LineTooltipItem(
+                  'Search: ${spot.y.toInt()}',
+                  TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                );
+              }).toList();
+            },
+          ),
+        ),
         lineBarsData: [
           LineChartBarData(
             spots: List.generate(searches.length, (index) => FlSpot(index.toDouble(), searches[index].toDouble())),
@@ -64,4 +77,8 @@ class WeeklySearchLineChart extends StatelessWidget {
       ),
     );
   }
+}
+
+_getColor() {
+  return AppColors.primaryAccentColor;
 }
