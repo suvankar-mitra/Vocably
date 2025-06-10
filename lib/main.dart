@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vocably/themes/app_colors.dart';
 import 'package:vocably/views/screens/landing_page.dart';
 
 void main() {
@@ -14,7 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Vocably',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
       home: const LandingPage(),
     );
   }

@@ -26,7 +26,7 @@ class SearchHistoryItems extends StatelessWidget {
                         children: [
                           // Dot
                           Container(
-                            width: 16,
+                            width: 18,
                             height: 18,
                             decoration: BoxDecoration(
                               color: AppColors.primaryAccentColor.withValues(alpha: 0.7),
@@ -52,11 +52,11 @@ class SearchHistoryItems extends StatelessWidget {
                   );
                 } else {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 7.0),
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Row(
                       children: [
                         // Line
-                        Container(width: 2, height: 20, color: AppColors.primaryAccentColor.withValues(alpha: .5)),
+                        Container(width: 2, height: 18, color: AppColors.primaryAccentColor.withValues(alpha: .5)),
                         const SizedBox(width: 16.0),
                         // word
                         Text(

@@ -10,6 +10,8 @@ class HomeSearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SearchScreen()));
@@ -17,11 +19,11 @@ class HomeSearchBarWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.searchBarBackground,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.3),
+              color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
               spreadRadius: 3,
               blurRadius: 5,
               offset: const Offset(0, 1),
@@ -37,14 +39,21 @@ class HomeSearchBarWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 child: Row(
                   children: [
-                    Icon(HugeIcons.strokeRoundedSearch01, color: AppColors.searchBarHintColor, size: 14.0),
+                    Icon(
+                      HugeIcons.strokeRoundedSearch01,
+                      color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                      size: 14.0,
+                    ),
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: AnimatedTextKit(
                         animatedTexts: [
                           TyperAnimatedText(
                             'Search a word or phrase',
-                            textStyle: GoogleFonts.poppins(fontSize: 14.0, color: AppColors.searchBarHintColor),
+                            textStyle: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                            ),
                             speed: const Duration(milliseconds: 100),
                           ),
                         ],
@@ -55,7 +64,7 @@ class HomeSearchBarWidget extends StatelessWidget {
                         stopPauseOnTap: true,
                       ),
                     ),
-                    Icon(HugeIcons.strokeRoundedBook02, color: AppColors.secondaryAccentColor),
+                    Icon(HugeIcons.strokeRoundedBook02, color: Theme.of(context).colorScheme.secondary),
                   ],
                 ),
               ),

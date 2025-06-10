@@ -44,14 +44,16 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardBackgroundColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.3),
+            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 3,
             blurRadius: 5,
             offset: const Offset(0, 1),
@@ -62,24 +64,14 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            //
-            AnimatedTextKit(
-              animatedTexts: [
-                ColorizeNoFadeAnimatedText(
-                  'Word of the day',
-                  textStyle: GoogleFonts.playfair(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.appTitleColor,
-                    fontSize: 20.0,
-                  ),
-                  colors: [AppColors.primaryAccentColor, AppColors.secondaryAccentColor, AppColors.primaryAccentColor],
-                  speed: Duration(milliseconds: 1000),
-                  textAlign: TextAlign.justify,
-                ),
-              ],
-              // isRepeatingAnimation: true,
-              repeatForever: true,
-              onTap: () {},
+            // card title
+            Text(
+              'Word of the day',
+              style: GoogleFonts.playfair(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.titleLarge?.color,
+                fontSize: 20.0,
+              ),
             ),
 
             // const SizedBox(height: 8.0),
@@ -133,7 +125,10 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           child: Center(
                             child: Column(
                               children: [
-                                Text('No words found', style: GoogleFonts.poppins(color: AppColors.secondaryTextColor)),
+                                Text(
+                                  'No words found',
+                                  style: GoogleFonts.poppins(color: Theme.of(context).textTheme.bodyMedium?.color),
+                                ),
                                 SizedBox(
                                   height: 100,
                                   width: 100,
@@ -157,7 +152,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                               style: GoogleFonts.merriweather(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22.0,
-                                color: AppColors.primaryTextColor,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                               ),
                             ),
                             const SizedBox(height: 5.0),
@@ -171,7 +166,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         entry.meanings?.first.partOfSpeech ?? '',
                                         style: GoogleFonts.merriweather(
                                           fontSize: 14.0,
-                                          color: AppColors.secondaryTextColor,
+                                          color: Theme.of(context).textTheme.bodyMedium?.color,
                                         ),
                                       ),
                                     ],
@@ -187,7 +182,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         (entry.ipa ?? '').trim(),
                                         style: GoogleFonts.merriweather(
                                           fontSize: 14.0,
-                                          color: AppColors.secondaryTextColor,
+                                          color: Theme.of(context).textTheme.bodyMedium?.color,
                                         ),
                                       ),
                                     ],
@@ -207,7 +202,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         },
                                         child: Icon(
                                           HugeIcons.strokeRoundedVolumeHigh,
-                                          color: AppColors.secondaryAccentColor,
+                                          color: Theme.of(context).colorScheme.secondary,
                                           size: 14.0,
                                         ),
                                       ),
@@ -215,7 +210,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                   ),
                               ],
                             ),
-
+                            // Definition
                             const SizedBox(height: 5.0),
                             RichText(
                               text: TextSpan(
@@ -242,10 +237,10 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                   Text(
                                     'Learn more',
                                     style: GoogleFonts.poppins(
-                                      color: AppColors.secondaryAccentColor,
+                                      color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 14.0,
                                       decoration: TextDecoration.underline,
-                                      decorationColor: AppColors.secondaryAccentColor,
+                                      decorationColor: Theme.of(context).colorScheme.secondary,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -253,7 +248,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                     leftToRight: true,
                                     child: Icon(
                                       HugeIcons.strokeRoundedArrowRight02,
-                                      color: AppColors.secondaryAccentColor,
+                                      color: Theme.of(context).colorScheme.secondary,
                                       size: 16.0,
                                     ),
                                   ),

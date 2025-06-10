@@ -16,14 +16,16 @@ class SearchHistoryCardWidget extends StatelessWidget {
       'June 3': ['remove', 'gracious', ''],
     };
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardBackgroundColor,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.3),
+            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 3,
             blurRadius: 5,
             offset: const Offset(0, 1),
@@ -42,7 +44,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
                   style: GoogleFonts.playfair(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.appTitleColor,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                 ),
               ],

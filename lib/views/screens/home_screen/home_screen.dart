@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:vocably/constants/app_constants.dart';
-import 'package:vocably/themes/app_colors.dart';
 import 'package:vocably/widgets/home_search_bar_widget.dart';
 import 'package:vocably/widgets/score_board_widget.dart';
 import 'package:vocably/widgets/search_history_card_widget.dart';
@@ -13,24 +11,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RichText(
-            text: TextSpan(
-              text: AppConstants.appName,
-              style: GoogleFonts.playfairDisplay(
-                fontSize: Theme.of(context).textTheme.displayMedium?.fontSize,
-                fontWeight: FontWeight.bold,
-                color: AppColors.activeNavIconColor,
-              ),
-            ),
-            textAlign: TextAlign.left,
-          ),
-        ),
+        title: Text(AppConstants.appName),
         centerTitle: true,
-        backgroundColor: AppColors.bottomNavBackground,
         elevation: 2,
         bottom: PreferredSize(preferredSize: const Size.fromHeight(8.0), child: Container()),
       ),
