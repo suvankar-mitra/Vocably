@@ -56,9 +56,9 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Color(0xFFF5F5F5), // backgroundColor
   cardColor: Color(0xFFFFFFFF), // cardBackgroundColor
   appBarTheme: AppBarTheme(
-    backgroundColor: Color(0xFFFFFFFF), // searchBarBackground
-    iconTheme: IconThemeData(color: Color(0xFF2E2E2E)), // primaryTextColor
-    titleTextStyle: TextStyle(color: Color(0xFF2E2E2E), fontSize: 20),
+    backgroundColor: Color(0xFF3F38A8), // searchBarBackgroundDark
+    iconTheme: IconThemeData(color: Color(0xFFFF6F91)), // primaryTextColorDark
+    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 44, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Color(0xFF3F38A8),
@@ -91,10 +91,10 @@ final ThemeData darkTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: Color(0xFF1C1C2E), // searchBarBackgroundDark
     iconTheme: IconThemeData(color: Color(0xFF883C4E)), // primaryTextColorDark
-    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFF883C4E)),
+    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 44, fontWeight: FontWeight.bold, color: Color(0xFF883C4E)),
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Color(0xFF2C2962),
+    backgroundColor: Color(0xFF1C1C2E),
     selectedItemColor: Color(0xFF883C4E), // activeNavIconColorDark
     unselectedItemColor: Color(0xFF7A7A7A), // inactiveNavIconColorDark
   ),
@@ -104,7 +104,7 @@ final ThemeData darkTheme = ThemeData(
     titleLarge: TextStyle(color: Color(0xFF4640A6)), // appTitleColorDark
   ),
   inputDecorationTheme: InputDecorationTheme(
-    hintStyle: TextStyle(color: Color(0xFF998FA7)), // searchBarHintColorDark
+    hintStyle: TextStyle(color: Color(0xFF676767)), // searchBarHintColorDark
   ),
   iconTheme: IconThemeData(color: Color(0xFF928CFF)), // primaryAccentColorDark
   colorScheme: ColorScheme.dark(
@@ -118,5 +118,9 @@ final ThemeData darkTheme = ThemeData(
   cardTheme: CardThemeData(
     color: Color(0xFF1E1E1E), // cardBackgroundColorDark
     elevation: 4,
+  ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFF1C1C2E),
+    foregroundColor: Color(0xFF883C4E),
   ),
 );
