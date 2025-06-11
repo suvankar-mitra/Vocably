@@ -9,6 +9,9 @@ class WeeklySearchLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return LineChart(
       LineChartData(
         maxY: (searches.reduce((a, b) => a > b ? a : b) + 2).toDouble(),
@@ -19,7 +22,7 @@ class WeeklySearchLineChart extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, _) {
-                const days = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU', ];
+                const days = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
                 return Text(
                   days[value.toInt()],
                   style: GoogleFonts.poppins(color: Colors.grey[700], fontWeight: FontWeight.w600, fontSize: 10),
@@ -44,7 +47,7 @@ class WeeklySearchLineChart extends StatelessWidget {
         borderData: FlBorderData(show: false),
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (touchedSpot) => _getColor(),
+            getTooltipColor: (touchedSpot) => _getColor(context, theme),
             getTooltipItems: (List<LineBarSpot> touchedSpots) {
               return touchedSpots.map((spot) {
                 return LineTooltipItem(
@@ -59,16 +62,16 @@ class WeeklySearchLineChart extends StatelessWidget {
           LineChartBarData(
             spots: List.generate(searches.length, (index) => FlSpot(index.toDouble(), searches[index].toDouble())),
             isCurved: true,
-            color: AppColors.appTitleColor,
+            color: theme.textTheme.titleLarge?.color,
             barWidth: 3,
             dotData: FlDotData(
               show: true,
               getDotPainter:
                   (spot, percent, bar, index) => FlDotCirclePainter(
                     radius: 4,
-                    color: AppColors.appTitleColor,
+                    color: theme.textTheme.titleLarge?.color ?? AppColors.appTitleColor,
                     strokeWidth: 1.5,
-                    strokeColor: Colors.white,
+                    strokeColor: isDark ? Colors.white60 : Colors.grey.shade300,
                   ),
             ),
             belowBarData: BarAreaData(show: false),
@@ -79,6 +82,6 @@ class WeeklySearchLineChart extends StatelessWidget {
   }
 }
 
-_getColor() {
-  return AppColors.primaryAccentColor;
+_getColor(BuildContext context, ThemeData theme) {
+  return theme.textTheme.titleLarge?.color;
 }

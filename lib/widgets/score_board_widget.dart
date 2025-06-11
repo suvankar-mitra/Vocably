@@ -13,14 +13,17 @@ class ScoreBoardWidget extends StatefulWidget {
 class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardBackgroundColor,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
 
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.3),
+            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 3,
             blurRadius: 5,
             offset: const Offset(0, 1),
@@ -33,7 +36,11 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
           children: [
             Text(
               'Weekly Score Card',
-              style: GoogleFonts.playfair(fontSize: 20.0, fontWeight: FontWeight.bold, color: AppColors.appTitleColor),
+              style: GoogleFonts.playfair(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: theme.textTheme.titleLarge?.color,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -44,13 +51,29 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                     children: [
                       Row(
                         children: [
-                          // Text('🔥 ', style: GoogleFonts.poppins(fontSize: 12.0)),
-                          Text('5', style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                          Text(' day streak', style: GoogleFonts.poppins(fontSize: 14.0)),
+                          Text(
+                            '5',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
+                          ),
+                          Text(
+                            ' day streak',
+                            style: GoogleFonts.poppins(fontSize: 14.0, color: theme.textTheme.bodyMedium?.color),
+                          ),
                           // Text(' Keep learning!', style: GoogleFonts.poppins(fontSize: 12.0)),
                         ],
                       ),
-                      Text('🏅 On a roll', style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                      Text(
+                        '🏅 On a roll',
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 6.0),
@@ -60,13 +83,27 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                       Row(
                         children: [
                           // Text('🤓 ', style: GoogleFonts.poppins(fontSize: 14.0)),
-                          Text('16', style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold)),
-                          Text(' words searched', style: GoogleFonts.poppins(fontSize: 14.0)),
+                          Text(
+                            '16',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
+                          ),
+                          Text(
+                            ' words searched',
+                            style: GoogleFonts.poppins(fontSize: 14.0, color: theme.textTheme.bodyMedium?.color),
+                          ),
                         ],
                       ),
                       Text(
                         '🧠 Active this week',
-                        style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
                       ),
                     ],
                   ),
@@ -77,16 +114,40 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                       Row(
                         children: [
                           // Text('🔖 ', style: GoogleFonts.poppins(fontSize: 14.0)),
-                          Text('2', style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                          Text(
+                            '2',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
+                          ),
                           Text(' words bookmarked', style: GoogleFonts.poppins(fontSize: 14.0)),
                         ],
                       ),
-                      Text('🔖 Nice curation', style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold)),
+                      Text(
+                        '🔖 Nice curation',
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 20.0, child: Divider(height: 0, thickness: 1)),
+                  SizedBox(
+                    height: 20.0,
+                    child: Divider(height: 0, thickness: 1, color: theme.textTheme.bodyMedium?.color),
+                  ),
 
-                  Text('📅 Your Weekly Summary', style: GoogleFonts.poppins(fontSize: 14.0)),
+                  Text(
+                    '📅 Your Weekly Summary',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w600,
+                      color: theme.textTheme.bodyMedium?.color,
+                    ),
+                  ),
                   const SizedBox(height: 20.0),
                   Column(
                     children: [

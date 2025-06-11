@@ -10,7 +10,8 @@ class HomeSearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return InkWell(
       onTap: () {
@@ -19,7 +20,7 @@ class HomeSearchBarWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
@@ -41,7 +42,7 @@ class HomeSearchBarWidget extends StatelessWidget {
                   children: [
                     Icon(
                       HugeIcons.strokeRoundedSearch01,
-                      color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                      color: theme.inputDecorationTheme.hintStyle!.color,
                       size: 14.0,
                     ),
                     const SizedBox(width: 8.0),
@@ -52,7 +53,7 @@ class HomeSearchBarWidget extends StatelessWidget {
                             'Search a word or phrase',
                             textStyle: GoogleFonts.poppins(
                               fontSize: 14.0,
-                              color: Theme.of(context).inputDecorationTheme.hintStyle!.color,
+                              color: theme.inputDecorationTheme.hintStyle!.color,
                             ),
                             speed: const Duration(milliseconds: 100),
                           ),
@@ -64,7 +65,7 @@ class HomeSearchBarWidget extends StatelessWidget {
                         stopPauseOnTap: true,
                       ),
                     ),
-                    Icon(HugeIcons.strokeRoundedBook02, color: Theme.of(context).colorScheme.secondary),
+                    Icon(HugeIcons.strokeRoundedBook02, color: theme.colorScheme.secondary),
                   ],
                 ),
               ),

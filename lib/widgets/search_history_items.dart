@@ -9,6 +9,8 @@ class SearchHistoryItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:
@@ -29,7 +31,7 @@ class SearchHistoryItems extends StatelessWidget {
                             width: 18,
                             height: 18,
                             decoration: BoxDecoration(
-                              color: AppColors.primaryAccentColor.withValues(alpha: 0.7),
+                              color: theme.textTheme.titleLarge?.color?.withValues(alpha: 0.7),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -39,7 +41,7 @@ class SearchHistoryItems extends StatelessWidget {
                             words[i],
                             style: GoogleFonts.poppins(
                               fontSize: 12.0,
-                              color: AppColors.secondaryTextColor,
+                              color: theme.textTheme.bodyMedium?.color,
                               fontWeight: FontWeight.w600,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -47,7 +49,7 @@ class SearchHistoryItems extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Text(date, style: GoogleFonts.poppins(fontSize: 12.0, color: AppColors.secondaryTextColor)),
+                      Text(date, style: GoogleFonts.poppins(fontSize: 12.0, color: theme.textTheme.bodyMedium?.color)),
                     ],
                   );
                 } else {
@@ -56,14 +58,18 @@ class SearchHistoryItems extends StatelessWidget {
                     child: Row(
                       children: [
                         // Line
-                        Container(width: 2, height: 18, color: AppColors.primaryAccentColor.withValues(alpha: .5)),
+                        Container(
+                          width: 2,
+                          height: 18,
+                          color: theme.textTheme.titleLarge?.color?.withValues(alpha: 0.5),
+                        ),
                         const SizedBox(width: 16.0),
                         // word
                         Text(
                           words[i],
                           style: GoogleFonts.poppins(
                             fontSize: 12.0,
-                            color: AppColors.secondaryTextColor,
+                            color: theme.textTheme.bodyMedium?.color,
                             // fontWeight: FontWeight.w500,
                           ),
                           overflow: TextOverflow.ellipsis,

@@ -1,10 +1,8 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
-import 'package:vocably/animations/colorized_no_fade_animated_text.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
@@ -44,11 +42,12 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
 
         boxShadow: [
@@ -69,12 +68,12 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
               'Word of the day',
               style: GoogleFonts.playfair(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.titleLarge?.color,
+                color: theme.textTheme.titleLarge?.color,
                 fontSize: 20.0,
               ),
             ),
 
-            // const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
               children: [
                 Expanded(
@@ -127,7 +126,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                               children: [
                                 Text(
                                   'No words found',
-                                  style: GoogleFonts.poppins(color: Theme.of(context).textTheme.bodyMedium?.color),
+                                  style: GoogleFonts.poppins(color: theme.textTheme.bodyMedium?.color),
                                 ),
                                 SizedBox(
                                   height: 100,
@@ -152,7 +151,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                               style: GoogleFonts.merriweather(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22.0,
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                color: theme.textTheme.bodyLarge?.color,
                               ),
                             ),
                             const SizedBox(height: 5.0),
@@ -166,7 +165,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         entry.meanings?.first.partOfSpeech ?? '',
                                         style: GoogleFonts.merriweather(
                                           fontSize: 14.0,
-                                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                                          color: theme.textTheme.bodyMedium?.color,
                                         ),
                                       ),
                                     ],
@@ -182,7 +181,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         (entry.ipa ?? '').trim(),
                                         style: GoogleFonts.merriweather(
                                           fontSize: 14.0,
-                                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                                          color: theme.textTheme.bodyMedium?.color,
                                         ),
                                       ),
                                     ],
@@ -202,7 +201,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         },
                                         child: Icon(
                                           HugeIcons.strokeRoundedVolumeHigh,
-                                          color: Theme.of(context).colorScheme.secondary,
+                                          color: theme.colorScheme.secondary,
                                           size: 14.0,
                                         ),
                                       ),
@@ -218,7 +217,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                 style: GoogleFonts.merriweather(
                                   fontSize: 16,
                                   height: 1.5,
-                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                  color: theme.textTheme.bodyLarge?.color,
                                 ),
                               ),
                             ),
@@ -237,10 +236,10 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                   Text(
                                     'Learn more',
                                     style: GoogleFonts.poppins(
-                                      color: Theme.of(context).colorScheme.secondary,
+                                      color: theme.colorScheme.secondary,
                                       fontSize: 14.0,
                                       decoration: TextDecoration.underline,
-                                      decorationColor: Theme.of(context).colorScheme.secondary,
+                                      decorationColor: theme.colorScheme.secondary,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -248,7 +247,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                     leftToRight: true,
                                     child: Icon(
                                       HugeIcons.strokeRoundedArrowRight02,
-                                      color: Theme.of(context).colorScheme.secondary,
+                                      color: theme.colorScheme.secondary,
                                       size: 16.0,
                                     ),
                                   ),

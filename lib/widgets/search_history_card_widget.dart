@@ -16,11 +16,12 @@ class SearchHistoryCardWidget extends StatelessWidget {
       'June 3': ['remove', 'gracious', ''],
     };
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
 
         boxShadow: [
@@ -44,7 +45,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
                   style: GoogleFonts.playfair(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.titleLarge?.color,
+                    color: theme.textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -69,10 +70,10 @@ class SearchHistoryCardWidget extends StatelessWidget {
                         Text(
                           'Show more',
                           style: GoogleFonts.poppins(
-                            color: AppColors.secondaryAccentColor,
+                            color: theme.colorScheme.secondary,
                             fontSize: 14.0,
                             decoration: TextDecoration.underline,
-                            decorationColor: AppColors.secondaryAccentColor,
+                            decorationColor: theme.colorScheme.secondary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -80,7 +81,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
                           leftToRight: true,
                           child: Icon(
                             HugeIcons.strokeRoundedArrowRight02,
-                            color: AppColors.secondaryAccentColor,
+                            color: theme.colorScheme.secondary,
                             size: 16.0,
                           ),
                         ),
