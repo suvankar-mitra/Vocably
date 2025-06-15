@@ -93,28 +93,29 @@ final ThemeData darkTheme = ThemeData(
     backgroundColor: Color(0xFF1C1C2E), // searchBarBackgroundDark
     iconTheme: IconThemeData(color: Color(0xFF883C4E)), // primaryTextColorDark
     titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFF883C4E)),
+    centerTitle: true,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Color(0xFF2C2962),
+    backgroundColor: Color(0xFF1C1C2E),
     selectedItemColor: Color(0xFF883C4E), // activeNavIconColorDark
     unselectedItemColor: Color(0xFF7A7A7A), // inactiveNavIconColorDark
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Color(0xFF9D9D9D)), // primaryTextColorDark
     bodyMedium: TextStyle(color: Color(0xFF707070)), // secondaryTextColorDark
-    titleLarge: TextStyle(color: Color(0xFF4640A6)), // appTitleColorDark
+    titleLarge: TextStyle(color: Color(0xFF1C1C2E)), // appTitleColorDark
   ),
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: TextStyle(color: Color(0xFF998FA7)), // searchBarHintColorDark
   ),
-  iconTheme: IconThemeData(color: Color(0xFF928CFF)), // primaryAccentColorDark
+  iconTheme: IconThemeData(color: Color(0xFF1C1C2E)), // primaryAccentColorDark
   colorScheme: ColorScheme.dark(
-    primary: Color(0xFF928CFF), // primaryAccentColorDark
+    primary: Color(0xFF1C1C2E), // primaryAccentColorDark
     secondary: Color(0xFFA85D0E),
     surface: Color(0xFF1E1E1E),
-    onPrimary: Colors.black,
-    onSecondary: Colors.black,
-    onSurface: Color(0xFFEAEAEA),
+    onPrimary: Color(0xFFB0B0B0),
+    onSecondary: Color(0xFFB0B0B0),
+    onSurface: Color(0xFFB0B0B0),
   ),
   cardTheme: CardThemeData(
     color: Color(0xFF1E1E1E), // cardBackgroundColorDark
