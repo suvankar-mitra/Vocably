@@ -2,7 +2,6 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:vocably/themes/app_colors.dart';
 import 'package:vocably/views/screens/home_screen/search_screen.dart';
 
 class HomeSearchBarWidget extends StatelessWidget {
@@ -11,7 +10,6 @@ class HomeSearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return InkWell(
       onTap: () {
@@ -24,7 +22,7 @@ class HomeSearchBarWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
-              color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
+              color: Colors.black87.withValues(alpha: 0.25),
               spreadRadius: 3,
               blurRadius: 5,
               offset: const Offset(0, 1),

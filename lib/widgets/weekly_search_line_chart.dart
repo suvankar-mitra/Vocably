@@ -10,7 +10,6 @@ class WeeklySearchLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return LineChart(
       LineChartData(
@@ -47,7 +46,7 @@ class WeeklySearchLineChart extends StatelessWidget {
         borderData: FlBorderData(show: false),
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (touchedSpot) => _getColor(context, theme),
+            getTooltipColor: (touchedSpot) => _getColor(theme),
             getTooltipItems: (List<LineBarSpot> touchedSpots) {
               return touchedSpots.map((spot) {
                 return LineTooltipItem(
@@ -62,16 +61,16 @@ class WeeklySearchLineChart extends StatelessWidget {
           LineChartBarData(
             spots: List.generate(searches.length, (index) => FlSpot(index.toDouble(), searches[index].toDouble())),
             isCurved: true,
-            color: theme.textTheme.titleLarge?.color,
+            color: AppColors.primaryAccentColor,
             barWidth: 3,
             dotData: FlDotData(
               show: true,
               getDotPainter:
                   (spot, percent, bar, index) => FlDotCirclePainter(
                     radius: 4,
-                    color: theme.textTheme.titleLarge?.color ?? AppColors.appTitleColor,
+                    color: AppColors.primaryAccentColor,
                     strokeWidth: 1.5,
-                    strokeColor: isDark ? Colors.white60 : Colors.grey.shade300,
+                    strokeColor: Colors.white,
                   ),
             ),
             belowBarData: BarAreaData(show: false),
@@ -82,6 +81,6 @@ class WeeklySearchLineChart extends StatelessWidget {
   }
 }
 
-_getColor(BuildContext context, ThemeData theme) {
-  return theme.textTheme.titleLarge?.color;
+_getColor(ThemeData theme) {
+  return theme.colorScheme.primary;
 }

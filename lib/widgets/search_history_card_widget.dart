@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:vocably/themes/app_colors.dart';
-import 'package:vocably/widgets/bouncable_wrapper_widget.dart';
 import 'package:vocably/widgets/search_history_items.dart';
 
 class SearchHistoryCardWidget extends StatelessWidget {
-  const SearchHistoryCardWidget({super.key});
+  const SearchHistoryCardWidget({super.key, required this.historyMap});
+
+  final Map<String, List<String>> historyMap;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, List<String>> historyMap = {
-      'June 5': ['readable', 'resource', 'make believe', ''],
-      'June 4': ['audacity', 'redundant', ''],
-      'June 3': ['remove', 'gracious', ''],
-    };
-
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -26,73 +20,59 @@ class SearchHistoryCardWidget extends StatelessWidget {
 
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
-            spreadRadius: 3,
+            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
+            spreadRadius: 1,
             blurRadius: 5,
-            offset: const Offset(0, 1),
+            blurStyle: BlurStyle.normal,
+            offset: const Offset(1, 1),
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Search History',
-                  style: GoogleFonts.playfair(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: theme.textTheme.titleLarge?.color,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SearchHistoryItems(historyMap: historyMap),
-
-                  const SizedBox(height: 10.0),
-
-                  InkWell(
-                    onTap: () {
-                      // Navigate to the details page or perform any action
-                      // For now, just show a snackbar
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Show more history')));
-                    },
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          // card title
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.9)),
+                  clipBehavior: Clip.antiAlias,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Show more',
+                          'Search History',
                           style: GoogleFonts.poppins(
-                            color: theme.colorScheme.secondary,
-                            fontSize: 14.0,
-                            decoration: TextDecoration.underline,
-                            decorationColor: theme.colorScheme.secondary,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onPrimary,
+                            fontSize: 16.0,
                           ),
                         ),
-                        BouncableWrapperWidget(
-                          leftToRight: true,
-                          child: Icon(
-                            HugeIcons.strokeRoundedArrowRight02,
-                            color: theme.colorScheme.secondary,
-                            size: 16.0,
-                          ),
+                        GestureDetector(
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Show more history')));
+                          },
+                          child: Icon(HugeIcons.strokeRoundedArrowRight01, color: theme.colorScheme.onPrimary),
                         ),
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [SearchHistoryItems(historyMap: historyMap)],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

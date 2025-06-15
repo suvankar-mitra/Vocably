@@ -58,7 +58,8 @@ final ThemeData lightTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: Color(0xFF3F38A8), // searchBarBackgroundDark
     iconTheme: IconThemeData(color: Color(0xFFFF6F91)), // primaryTextColorDark
-    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 44, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
+    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
+    centerTitle: true,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Color(0xFF3F38A8),
@@ -75,8 +76,8 @@ final ThemeData lightTheme = ThemeData(
   ),
   iconTheme: IconThemeData(color: Color(0xFF6C63FF)), // primaryAccentColor
   colorScheme: ColorScheme.light(
-    primary: Color(0xFF6C63FF), // primaryAccentColor
-    secondary: Color(0xFFE08D30),
+    primary: Color(0xFF3F38A8), // primaryAccentColor
+    secondary: Color(0xFFFF6F91),
     surface: Color(0xFFFFFFFF),
     onPrimary: Colors.white,
     onSecondary: Colors.black,
@@ -91,7 +92,8 @@ final ThemeData darkTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: Color(0xFF1C1C2E), // searchBarBackgroundDark
     iconTheme: IconThemeData(color: Color(0xFF883C4E)), // primaryTextColorDark
-    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 44, fontWeight: FontWeight.bold, color: Color(0xFF883C4E)),
+    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFF883C4E)),
+    centerTitle: true,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Color(0xFF1C1C2E),
@@ -101,26 +103,22 @@ final ThemeData darkTheme = ThemeData(
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Color(0xFF9D9D9D)), // primaryTextColorDark
     bodyMedium: TextStyle(color: Color(0xFF707070)), // secondaryTextColorDark
-    titleLarge: TextStyle(color: Color(0xFF4640A6)), // appTitleColorDark
+    titleLarge: TextStyle(color: Color(0xFF1C1C2E)), // appTitleColorDark
   ),
   inputDecorationTheme: InputDecorationTheme(
-    hintStyle: TextStyle(color: Color(0xFF676767)), // searchBarHintColorDark
+    hintStyle: TextStyle(color: Color(0xFF998FA7)), // searchBarHintColorDark
   ),
-  iconTheme: IconThemeData(color: Color(0xFF928CFF)), // primaryAccentColorDark
+  iconTheme: IconThemeData(color: Color(0xFF1C1C2E)), // primaryAccentColorDark
   colorScheme: ColorScheme.dark(
-    primary: Color(0xFF928CFF), // primaryAccentColorDark
+    primary: Color(0xFF1C1C2E), // primaryAccentColorDark
     secondary: Color(0xFFA85D0E),
     surface: Color(0xFF1E1E1E),
-    onPrimary: Colors.black,
-    onSecondary: Colors.black,
-    onSurface: Color(0xFFEAEAEA),
+    onPrimary: Color(0xFFB0B0B0),
+    onSecondary: Color(0xFFB0B0B0),
+    onSurface: Color(0xFFB0B0B0),
   ),
   cardTheme: CardThemeData(
     color: Color(0xFF1E1E1E), // cardBackgroundColorDark
     elevation: 4,
-  ),
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
-    backgroundColor: Color(0xFF1C1C2E),
-    foregroundColor: Color(0xFF883C4E),
   ),
 );

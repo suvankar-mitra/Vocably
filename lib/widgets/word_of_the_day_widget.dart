@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
-import 'package:vocably/widgets/bouncable_wrapper_widget.dart';
+import 'package:vocably/views/screens/home_screen/definition_screen.dart';
 
 class WordOfTheDayWidget extends StatefulWidget {
   const WordOfTheDayWidget({super.key});
@@ -19,6 +19,8 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
   late AudioPlayer _audioPlayer;
   late Future<WordEntryDTO> _wordOfTheDayFuture;
   final DictionaryApiService _service = DictionaryApiService();
+  bool _isDefCollapsed = true;
+  bool _isAudioPlaying = false;
 
   @override
   void initState() {
@@ -52,29 +54,75 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
 
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
-            spreadRadius: 3,
+            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
+            spreadRadius: 1,
             blurRadius: 5,
-            offset: const Offset(0, 1),
+            blurStyle: BlurStyle.normal,
+            offset: const Offset(1, 1),
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            // card title
-            Text(
-              'Word of the day',
-              style: GoogleFonts.playfair(
-                fontWeight: FontWeight.bold,
-                color: theme.textTheme.titleLarge?.color,
-                fontSize: 20.0,
-              ),
-            ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          // card title
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.9)),
+                  clipBehavior: Clip.antiAlias,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Word of the day',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onPrimary,
+                            fontSize: 16.0,
+                          ),
+                        ),
 
-            const SizedBox(height: 8.0),
-            Row(
+                        FutureBuilder<WordEntryDTO>(
+                          future: _wordOfTheDayFuture,
+                          builder: (context, snapshot) {
+                            final entry = snapshot.data;
+                            if (entry != null) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => DefinitionScreen(word: entry.word ?? '')),
+                                  );
+                                },
+                                child: Hero(
+                                  tag: 'wordOfTheDay',
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Icon(
+                                      HugeIcons.strokeRoundedArrowRight01,
+                                      color: theme.colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               children: [
                 Expanded(
                   child: FutureBuilder<WordEntryDTO>(
@@ -139,133 +187,126 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                         );
                       }
 
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // word
-                            Text(
-                              entry.word ?? '',
-                              style: GoogleFonts.merriweather(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22.0,
-                                color: theme.textTheme.bodyLarge?.color,
-                              ),
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // word
+                          Text(
+                            entry.word ?? '',
+                            style: GoogleFonts.merriweather(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22.0,
+                              color: theme.textTheme.bodyLarge?.color,
                             ),
-                            const SizedBox(height: 5.0),
-                            // phonetic details
-                            Row(
-                              children: [
-                                if ((entry.meanings?.first.partOfSpeech ?? '').isNotEmpty)
-                                  Row(
-                                    children: [
-                                      Text(
-                                        entry.meanings?.first.partOfSpeech ?? '',
-                                        style: GoogleFonts.merriweather(
-                                          fontSize: 14.0,
-                                          color: theme.textTheme.bodyMedium?.color,
-                                        ),
+                          ),
+                          const SizedBox(height: 5.0),
+                          // phonetic details
+                          Row(
+                            children: [
+                              if ((entry.meanings?.first.partOfSpeech ?? '').isNotEmpty)
+                                Row(
+                                  children: [
+                                    Text(
+                                      entry.meanings?.first.partOfSpeech ?? '',
+                                      style: GoogleFonts.merriweather(
+                                        fontSize: 14.0,
+                                        color: theme.textTheme.bodyMedium?.color,
                                       ),
-                                    ],
-                                  ),
-
-                                if ((entry.ipa ?? '').isNotEmpty)
-                                  Row(
-                                    children: [
-                                      const SizedBox(width: 4.0),
-                                      Text('•'),
-                                      const SizedBox(width: 4.0),
-                                      Text(
-                                        (entry.ipa ?? '').trim(),
-                                        style: GoogleFonts.merriweather(
-                                          fontSize: 14.0,
-                                          color: theme.textTheme.bodyMedium?.color,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                if ((entry.audioUrl ?? '').isNotEmpty)
-                                  Row(
-                                    children: [
-                                      const SizedBox(width: 4.0),
-                                      Text('•'),
-                                      const SizedBox(width: 4.0),
-                                      InkWell(
-                                        onTap: () {
-                                          // play the media if available
-                                          String mediaUrl = entry.audioUrl ?? '';
-                                          _playAudio(mediaUrl);
-                                        },
-                                        child: Icon(
-                                          HugeIcons.strokeRoundedVolumeHigh,
-                                          color: theme.colorScheme.secondary,
-                                          size: 14.0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                            // Definition
-                            const SizedBox(height: 5.0),
-                            RichText(
-                              text: TextSpan(
-                                text: entry.meanings?.first.senses?.first.glosses?.first ?? 'No definition found',
-                                style: GoogleFonts.merriweather(
-                                  fontSize: 16,
-                                  height: 1.5,
-                                  color: theme.textTheme.bodyLarge?.color,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            // Learn more button
-                            const SizedBox(height: 10.0),
-                            InkWell(
-                              onTap: () {
-                                // Navigate to the details page or perform any action
-                                // For now, just show a snackbar
-                                ScaffoldMessenger.of(
-                                  context,
-                                ).showSnackBar(SnackBar(content: Text('View more details about $entry')));
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Learn more',
-                                    style: GoogleFonts.poppins(
-                                      color: theme.colorScheme.secondary,
-                                      fontSize: 14.0,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: theme.colorScheme.secondary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  BouncableWrapperWidget(
-                                    leftToRight: true,
-                                    child: Icon(
-                                      HugeIcons.strokeRoundedArrowRight02,
-                                      color: theme.colorScheme.secondary,
-                                      size: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
 
-                            const SizedBox(height: 4.0),
-                          ],
-                        ),
+                              if ((entry.ipa ?? '').isNotEmpty)
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 4.0),
+                                    Text('•'),
+                                    const SizedBox(width: 4.0),
+                                    Text(
+                                      (entry.ipa ?? '').trim(),
+                                      style: GoogleFonts.merriweather(
+                                        fontSize: 14.0,
+                                        color: theme.textTheme.bodyMedium?.color,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                              if ((entry.audioUrl ?? '').isNotEmpty)
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 4.0),
+                                    Text('•'),
+                                    const SizedBox(width: 4.0),
+                                    InkWell(
+                                      onTap: () {
+                                        // play the media if available
+                                        String mediaUrl = entry.audioUrl ?? '';
+                                        _playAudio(mediaUrl);
+                                      },
+                                      child:
+                                          _isAudioPlaying
+                                              ? TweenAnimationBuilder<double>(
+                                                // Animate when playing
+                                                tween: Tween<double>(begin: 1.5, end: 1.0), // Example: scale tween
+                                                duration: const Duration(milliseconds: 500),
+                                                builder: (context, scale, child) {
+                                                  return Transform.scale(scale: scale, child: child);
+                                                },
+                                                child: Icon(
+                                                  HugeIcons.strokeRoundedVolumeHigh,
+                                                  color: theme.colorScheme.primary, // Highlight color
+                                                  size: 18.0,
+                                                ),
+                                              )
+                                              : Icon(
+                                                // Static icon when not playing
+                                                HugeIcons.strokeRoundedVolumeHigh,
+                                                color: theme.colorScheme.primary,
+                                                size: 18.0,
+                                              ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                          // Definition
+                          const SizedBox(height: 8.0),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isDefCollapsed = !_isDefCollapsed;
+                              });
+                            },
+                            child: AnimatedSize(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Easing.standard,
+                              alignment: Alignment.topCenter,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: entry.meanings?.first.senses?.first.glosses?.first ?? 'No definition found',
+                                  style: GoogleFonts.merriweather(
+                                    fontSize: 16,
+                                    height: 1.5,
+                                    color: theme.textTheme.bodyLarge?.color,
+                                  ),
+                                ),
+                                // maxLines: _isDefCollapsed ? 2 : 0,
+                                overflow: _isDefCollapsed ? TextOverflow.ellipsis : TextOverflow.visible,
+                                // overflow: TextOverflow.visible,
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -278,6 +319,14 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
     try {
       // For remote URLs
       await _audioPlayer.play(UrlSource(mediaUrl));
+
+      _audioPlayer.onPlayerStateChanged.listen((state) {
+        if (mounted) {
+          setState(() {
+            _isAudioPlaying = state == PlayerState.playing;
+          });
+        }
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error playing audio: ${e.toString()}')));
     }

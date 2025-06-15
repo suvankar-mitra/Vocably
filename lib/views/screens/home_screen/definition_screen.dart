@@ -11,6 +11,6 @@ class DefinitionScreen extends StatefulWidget {
 class _DefinitionScreenState extends State<DefinitionScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(body: Hero(tag: 'wordOfTheDay', child: Material(color: Colors.transparent)));
   }
 }
