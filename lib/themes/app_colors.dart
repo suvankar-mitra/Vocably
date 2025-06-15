@@ -76,7 +76,7 @@ final ThemeData lightTheme = ThemeData(
   ),
   iconTheme: IconThemeData(color: Color(0xFF6C63FF)), // primaryAccentColor
   colorScheme: ColorScheme.light(
-    primary: Color(0xFF6C63FF), // primaryAccentColor
+    primary: Color(0xFF3F38A8), // primaryAccentColor
     secondary: Color(0xFFFF6F91),
     surface: Color(0xFFFFFFFF),
     onPrimary: Colors.white,
