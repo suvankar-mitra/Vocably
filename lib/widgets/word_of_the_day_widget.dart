@@ -85,7 +85,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Show word of the day')));
+                          },
                           child: Icon(HugeIcons.strokeRoundedArrowRight01, color: theme.colorScheme.onPrimary),
                         ),
                       ],
