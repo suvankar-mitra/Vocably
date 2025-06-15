@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:vocably/views/screens/bookmark_page.dart';
 import 'package:vocably/views/screens/home_screen/home_screen.dart';
@@ -25,42 +26,48 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
-        indicatorColor: Colors.transparent,
-        height: 64.0,
-        destinations: <NavigationDestination>[
-          NavigationDestination(
-            icon: Icon(HugeIcons.strokeRoundedHome01, color: theme.bottomNavigationBarTheme.unselectedItemColor),
-            selectedIcon: Icon(HugeIcons.strokeRoundedHome01, color: theme.bottomNavigationBarTheme.selectedItemColor),
-            label: '',
-          ),
-          NavigationDestination(
-            icon: Icon(
-              HugeIcons.strokeRoundedBookBookmark01,
-              color: theme.bottomNavigationBarTheme.unselectedItemColor,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0)),
+
+          boxShadow: [
+            BoxShadow(
+              color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              blurStyle: BlurStyle.normal,
+              offset: const Offset(0, 1),
             ),
-            selectedIcon: Icon(
-              HugeIcons.strokeRoundedBookBookmark01,
-              color: theme.bottomNavigationBarTheme.selectedItemColor,
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: NavigationBar(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: _onItemTapped,
+          destinations: <NavigationDestination>[
+            NavigationDestination(
+              icon: Icon(HugeIcons.strokeRoundedHome01),
+              selectedIcon: Icon(HugeIcons.strokeRoundedHome01),
+              label: 'Home',
             ),
-            label: '',
-          ),
-          NavigationDestination(
-            icon: Icon(HugeIcons.strokeRoundedSettings01, color: theme.bottomNavigationBarTheme.unselectedItemColor),
-            selectedIcon: Icon(
-              HugeIcons.strokeRoundedSettings01,
-              color: theme.bottomNavigationBarTheme.selectedItemColor,
+            NavigationDestination(
+              icon: Icon(HugeIcons.strokeRoundedFloppyDisk),
+              selectedIcon: Icon(HugeIcons.strokeRoundedFloppyDisk),
+              label: 'Saved',
             ),
-            label: '',
-          ),
-        ],
+            NavigationDestination(
+              icon: Icon(HugeIcons.strokeRoundedSettings01),
+              selectedIcon: Icon(HugeIcons.strokeRoundedSettings01),
+              label: 'Settings',
+            ),
+          ],
+        ),
       ),
     );
   }
