@@ -56,9 +56,10 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Color(0xFFF5F5F5), // backgroundColor
   cardColor: Color(0xFFFFFFFF), // cardBackgroundColor
   appBarTheme: AppBarTheme(
-    backgroundColor: Color(0xFFFFFFFF), // searchBarBackground
-    iconTheme: IconThemeData(color: Color(0xFF2E2E2E)), // primaryTextColor
-    titleTextStyle: TextStyle(color: Color(0xFF2E2E2E), fontSize: 20),
+    backgroundColor: Color(0xFF3F38A8), // searchBarBackgroundDark
+    iconTheme: IconThemeData(color: Color(0xFFFF6F91)), // primaryTextColorDark
+    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
+    centerTitle: true,
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Color(0xFF3F38A8),
@@ -76,7 +77,7 @@ final ThemeData lightTheme = ThemeData(
   iconTheme: IconThemeData(color: Color(0xFF6C63FF)), // primaryAccentColor
   colorScheme: ColorScheme.light(
     primary: Color(0xFF6C63FF), // primaryAccentColor
-    secondary: Color(0xFFE08D30),
+    secondary: Color(0xFFFF6F91),
     surface: Color(0xFFFFFFFF),
     onPrimary: Colors.white,
     onSecondary: Colors.black,
