@@ -6,7 +6,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
-import 'package:vocably/views/screens/home_screen/definition_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -174,7 +173,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         if (_controller.text.isEmpty) {
                                           return;
                                         }
-                                        final String wordToSearch = _controller.text.trim();
+                                        // final String wordToSearch = _controller.text.trim();
                                         // open definition screen and pop this screen
                                         // Navigator.of(context).pushReplacement(
                                         //   MaterialPageRoute(
