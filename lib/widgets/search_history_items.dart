@@ -33,12 +33,12 @@ class SearchHistoryItems extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                           ),
-                          const SizedBox(width: 10.0),
+                          const SizedBox(width: 9.0),
                           // word
                           Text(
                             words[i],
                             style: GoogleFonts.poppins(
-                              fontSize: 12.0,
+                              fontSize: 14.0,
                               color: AppColors.secondaryTextColor,
                               fontWeight: FontWeight.w600,
                             ),
@@ -47,7 +47,7 @@ class SearchHistoryItems extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Text(date, style: GoogleFonts.poppins(fontSize: 12.0, color: AppColors.secondaryTextColor)),
+                      Text(date, style: GoogleFonts.poppins(fontSize: 14.0, color: AppColors.secondaryTextColor)),
                     ],
                   );
                 } else {
@@ -62,7 +62,7 @@ class SearchHistoryItems extends StatelessWidget {
                         Text(
                           words[i],
                           style: GoogleFonts.poppins(
-                            fontSize: 12.0,
+                            fontSize: 14.0,
                             color: AppColors.secondaryTextColor,
                             // fontWeight: FontWeight.w500,
                           ),
