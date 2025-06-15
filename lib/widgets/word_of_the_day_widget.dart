@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
+import 'package:vocably/views/screens/home_screen/definition_screen.dart';
 
 class WordOfTheDayWidget extends StatefulWidget {
   const WordOfTheDayWidget({super.key});
@@ -81,14 +82,35 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: theme.colorScheme.onPrimary,
-                            fontSize: 18.0,
+                            fontSize: 16.0,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Show word of the day')));
+
+                        FutureBuilder<WordEntryDTO>(
+                          future: _wordOfTheDayFuture,
+                          builder: (context, snapshot) {
+                            final entry = snapshot.data;
+                            if (entry != null) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => DefinitionScreen(word: entry.word ?? '')),
+                                  );
+                                },
+                                child: Hero(
+                                  tag: 'wordOfTheDay',
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Icon(
+                                      HugeIcons.strokeRoundedArrowRight01,
+                                      color: theme.colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
                           },
-                          child: Icon(HugeIcons.strokeRoundedArrowRight01, color: theme.colorScheme.onPrimary),
                         ),
                       ],
                     ),
