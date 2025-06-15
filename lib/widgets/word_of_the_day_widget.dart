@@ -256,14 +256,14 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                                 },
                                                 child: Icon(
                                                   HugeIcons.strokeRoundedVolumeHigh,
-                                                  color: theme.colorScheme.primary, // Highlight color
+                                                  color: theme.colorScheme.secondary, // Highlight color
                                                   size: 18.0,
                                                 ),
                                               )
                                               : Icon(
                                                 // Static icon when not playing
                                                 HugeIcons.strokeRoundedVolumeHigh,
-                                                color: theme.colorScheme.primary,
+                                                color: theme.colorScheme.secondary,
                                                 size: 18.0,
                                               ),
                                     ),
@@ -292,7 +292,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                     color: theme.textTheme.bodyLarge?.color,
                                   ),
                                 ),
-                                // maxLines: _isDefCollapsed ? 2 : 0,
+                                maxLines: _isDefCollapsed ? 2 : null,
                                 overflow: _isDefCollapsed ? TextOverflow.ellipsis : TextOverflow.visible,
                                 // overflow: TextOverflow.visible,
                               ),
