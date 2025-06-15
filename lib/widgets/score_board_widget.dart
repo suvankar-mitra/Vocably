@@ -51,7 +51,7 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: theme.colorScheme.onPrimary,
-                            fontSize: 18.0,
+                            fontSize: 16.0,
                           ),
                         ),
                         GestureDetector(

@@ -48,7 +48,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: theme.colorScheme.onPrimary,
-                            fontSize: 18.0,
+                            fontSize: 16.0,
                           ),
                         ),
                         GestureDetector(
