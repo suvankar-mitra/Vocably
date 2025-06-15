@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:vocably/views/screens/bookmark_page.dart';
 import 'package:vocably/views/screens/home_screen/home_screen.dart';
