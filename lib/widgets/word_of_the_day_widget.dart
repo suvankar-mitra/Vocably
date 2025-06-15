@@ -95,9 +95,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                             if (entry != null) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (context) => DefinitionScreen(word: entry.word ?? '')),
-                                  );
+                                  Navigator.of(
+                                    context,
+                                  ).push(MaterialPageRoute(builder: (context) => DefinitionScreen(wordEntry: entry)));
                                 },
                                 child: Hero(
                                   tag: 'wordOfTheDay',
@@ -247,6 +247,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                         // play the media if available
                                         String mediaUrl = entry.audioUrl ?? '';
                                         _playAudio(mediaUrl);
+                                        setState(() {
+                                          _isAudioPlaying = true;
+                                        });
                                       },
                                       child:
                                           _isAudioPlaying
@@ -316,8 +319,10 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
 
   Future<void> _playAudio(String mediaUrl) async {
     if (mediaUrl.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No audio URL available.')));
-      return;
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No audio URL available.')));
+        return;
+      }
     }
     try {
       // For remote URLs
@@ -331,7 +336,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
         }
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error playing audio: ${e.toString()}')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error playing audio: ${e.toString()}')));
+      }
     }
   }
 }

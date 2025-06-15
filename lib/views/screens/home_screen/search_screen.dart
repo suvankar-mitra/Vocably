@@ -176,9 +176,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                         }
                                         final String wordToSearch = _controller.text.trim();
                                         // open definition screen and pop this screen
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(builder: (context) => DefinitionScreen(word: wordToSearch)),
-                                        );
+                                        // Navigator.of(context).pushReplacement(
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => DefinitionScreen(wordEntry: ),
+                                        //   ),
+                                        // );
                                       },
                                     ),
                                   ),
