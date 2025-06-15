@@ -13,9 +13,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppConstants.appName),
-        centerTitle: true,
-        elevation: 2,
-        bottom: PreferredSize(preferredSize: const Size.fromHeight(8.0), child: Container()),
       ),
       body: SingleChildScrollView(
         child: Column(
