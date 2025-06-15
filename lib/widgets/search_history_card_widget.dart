@@ -36,7 +36,9 @@ class SearchHistoryCardWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.9)),
+                  decoration: BoxDecoration(
+                    color: isDark ? theme.colorScheme.surface : theme.colorScheme.primary.withValues(alpha: 0.9),
+                  ),
                   clipBehavior: Clip.antiAlias,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -47,7 +49,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
                           'Search History',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onPrimary,
+                            color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                             fontSize: 16.0,
                           ),
                         ),
@@ -55,7 +57,10 @@ class SearchHistoryCardWidget extends StatelessWidget {
                           onTap: () {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Show more history')));
                           },
-                          child: Icon(HugeIcons.strokeRoundedArrowRight01, color: theme.colorScheme.onPrimary),
+                          child: Icon(
+                            HugeIcons.strokeRoundedArrowRight01,
+                            color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
+                          ),
                         ),
                       ],
                     ),
@@ -64,6 +69,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 0.0, child: Divider(color: isDark ? Colors.grey : Colors.transparent)),
 
           Padding(
             padding: const EdgeInsets.all(16.0),

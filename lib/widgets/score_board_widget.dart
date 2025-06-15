@@ -39,7 +39,9 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
             children: [
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.9)),
+                  decoration: BoxDecoration(
+                    color: isDark ? theme.colorScheme.surface : theme.colorScheme.primary.withValues(alpha: 0.9),
+                  ),
                   clipBehavior: Clip.antiAlias,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -50,7 +52,7 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                           'Score card',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onPrimary,
+                            color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                             fontSize: 16.0,
                           ),
                         ),
@@ -58,7 +60,10 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                           onTap: () {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Share this card')));
                           },
-                          child: Icon(HugeIcons.strokeRoundedShare08, color: theme.colorScheme.onPrimary),
+                          child: Icon(
+                            HugeIcons.strokeRoundedShare08,
+                            color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
+                          ),
                         ),
                       ],
                     ),
@@ -67,6 +72,8 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
               ),
             ],
           ),
+
+          SizedBox(height: 0.0, child: Divider(color: isDark ? Colors.grey : Colors.transparent)),
 
           Padding(
             padding: const EdgeInsets.all(16.0),

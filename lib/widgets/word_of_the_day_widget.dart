@@ -70,7 +70,9 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
             children: [
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: 0.9)),
+                  decoration: BoxDecoration(
+                    color: isDark ? theme.colorScheme.surface : theme.colorScheme.primary.withValues(alpha: 0.9),
+                  ),
                   clipBehavior: Clip.antiAlias,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -81,7 +83,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                           'Word of the day',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onPrimary,
+                            color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                             fontSize: 16.0,
                           ),
                         ),
@@ -103,7 +105,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                     color: Colors.transparent,
                                     child: Icon(
                                       HugeIcons.strokeRoundedArrowRight01,
-                                      color: theme.colorScheme.onPrimary,
+                                      color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                                     ),
                                   ),
                                 ),
@@ -119,6 +121,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
               ),
             ],
           ),
+          SizedBox(height: 0.0, child: Divider(color: isDark ? Colors.grey : Colors.transparent)),
 
           Padding(
             padding: const EdgeInsets.all(16.0),

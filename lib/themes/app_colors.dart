@@ -147,7 +147,7 @@ final ThemeData darkTheme = ThemeData(
   iconTheme: IconThemeData(color: Color(0xFF1C1C2E)), // primaryAccentColorDark
   colorScheme: ColorScheme.dark(
     primary: Color(0xFF1C1C2E), // primaryAccentColorDark
-    secondary: Color(0xFFA85D0E),
+    secondary: Color(0xFF883C4E),
     surface: Color(0xFF1E1E1E),
     onPrimary: Color(0xFFB0B0B0),
     onSecondary: Color(0xFFB0B0B0),
