@@ -61,10 +61,28 @@ final ThemeData lightTheme = ThemeData(
     titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
     centerTitle: true,
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Color(0xFF3F38A8),
-    selectedItemColor: Color(0xFFFF6F91), // activeNavIconColor
-    unselectedItemColor: Color(0xFFB2B2B2), // inactiveNavIconColor
+  navigationBarTheme: NavigationBarThemeData(
+    elevation: 2,
+    height: 64.0,
+    backgroundColor: Color(0xFFFFFFFF),
+    labelTextStyle: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        // Selected label style
+        return GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFFFF6F91));
+      }
+      // Unselected label style
+      return GoogleFonts.poppins(fontSize: 12, color: const Color(0xFFB2B2B2));
+    }),
+    labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+    iconTheme: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        // Selected icon style
+        return IconThemeData(color: const Color(0xFFFFFFFF));
+      }
+      // Unselected icon style
+      return IconThemeData(color: const Color(0xFFB2B2B2));
+    }),
+    indicatorColor: Color(0xFFFF6F91),
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Color(0xFF2E2E2E)), // primaryTextColor
@@ -95,10 +113,28 @@ final ThemeData darkTheme = ThemeData(
     titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFF883C4E)),
     centerTitle: true,
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Color(0xFF1C1C2E),
-    selectedItemColor: Color(0xFF883C4E), // activeNavIconColorDark
-    unselectedItemColor: Color(0xFF7A7A7A), // inactiveNavIconColorDark
+  navigationBarTheme: NavigationBarThemeData(
+    elevation: 2,
+    height: 64.0,
+    backgroundColor: Color(0xFF121212),
+    labelTextStyle: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        // Selected label style
+        return GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF883C4E));
+      }
+      // Unselected label style
+      return GoogleFonts.poppins(fontSize: 12, color: const Color(0xFFB2B2B2));
+    }),
+    labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+    iconTheme: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        // Selected icon style
+        return IconThemeData(color: const Color(0xFFFFFFFF));
+      }
+      // Unselected icon style
+      return IconThemeData(color: const Color(0xFFB2B2B2));
+    }),
+    indicatorColor: Color(0xFF883C4E),
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Color(0xFF9D9D9D)), // primaryTextColorDark
