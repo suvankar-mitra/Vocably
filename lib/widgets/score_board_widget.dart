@@ -117,7 +117,10 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                     Text('🔖 Nice curation', style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.bold)),
                   ],
                 ),
-                const SizedBox(height: 20.0, child: Divider(height: 0, thickness: 1)),
+                SizedBox(
+                  height: 20.0,
+                  child: Divider(height: 0, thickness: 1, color: theme.colorScheme.onSurface.withValues(alpha: 0.3)),
+                ),
 
                 Text('📅 Your Weekly Summary', style: GoogleFonts.poppins(fontSize: 14.0)),
                 const SizedBox(height: 20.0),
