@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
 
     final Map<String, List<String>> historyMap = {
       'June 15': ['readable', 'resource', 'make believe', ''],
-      // 'June 4': ['audacity', 'redundant', ''],
+      'June 14': ['audacity', 'redundant', ''],
       // 'June 3': ['remove', 'gracious', ''],
     };
 
@@ -42,7 +42,12 @@ class HomeScreen extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 24.0),
-                child: HomeSearchBarWidget(),
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 300),
+                  alignment: Alignment.topCenter,
+                  curve: Curves.easeOut,
+                  child: HomeSearchBarWidget(),
+                ),
               ),
             ),
 
