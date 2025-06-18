@@ -6,7 +6,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
-import 'package:vocably/themes/app_colors.dart';
 
 class DefinitionScreen extends StatefulWidget {
   final String word;
