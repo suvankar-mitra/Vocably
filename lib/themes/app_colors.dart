@@ -63,7 +63,7 @@ final ThemeData lightTheme = ThemeData(
   ),
   navigationBarTheme: NavigationBarThemeData(
     elevation: 2,
-    height: 64.0,
+    // height: 64.0,
     backgroundColor: Color(0xFFFFFFFF),
     labelTextStyle: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
@@ -73,7 +73,7 @@ final ThemeData lightTheme = ThemeData(
       // Unselected label style
       return GoogleFonts.poppins(fontSize: 12, color: const Color(0xFFB2B2B2));
     }),
-    labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+    labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
     iconTheme: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         // Selected icon style
@@ -92,7 +92,7 @@ final ThemeData lightTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: TextStyle(color: Color(0xFF6D5D7A)), // searchBarHintColor
   ),
-  iconTheme: IconThemeData(color: Color(0xFF6C63FF)), // primaryAccentColor
+  iconTheme: IconThemeData(color: Color(0xFFFF6F91)), // primaryAccentColor
   colorScheme: ColorScheme.light(
     primary: Color(0xFF3F38A8), // primaryAccentColor
     secondary: Color(0xFFFF6F91),
@@ -100,6 +100,18 @@ final ThemeData lightTheme = ThemeData(
     onPrimary: Colors.white,
     onSecondary: Colors.black,
     onSurface: Color(0xFF2E2E2E),
+  ),
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: GoogleFonts.poppins(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Color(0xFF3F38A8).withValues(alpha: 0.2),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+    ),
+  ),
+  cardTheme: CardThemeData(
+    color: Color(0xFF958DFF), // cardBackgroundColor
   ),
 );
 
