@@ -7,7 +7,7 @@ class DictionaryApiService {
       // baseUrl: 'http://fedora.taila978b4.ts.net:8800/dictionaryapi/v1',
       baseUrl: 'http://skull-fedora.taila978b4.ts.net:8800/dictionaryapi/v1',
       connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 60),
       contentType: 'JSON',
     ),
   );
@@ -17,12 +17,13 @@ class DictionaryApiService {
       final response = await _dio.get('/definitions/en/$word');
       return WordEntryDTO.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw Exception('Failed to fetch definition: ${e.message}');
+      // throw Exception('Failed to fetch definition: ${e.message}');
+      rethrow;
     }
   }
 
   Future<WordEntryDTO> getWordOfTheDay() async {
-    return getDefinition('deduct');
+    return getDefinition('light');
   }
 
   Future<List<String>> getListWordsByFilter(String filter) async {
