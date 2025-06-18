@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:vocably/views/screens/bookmark_page.dart';
+import 'package:vocably/views/screens/game_page.dart';
 import 'package:vocably/views/screens/home_screen/home_screen.dart';
 import 'package:vocably/views/screens/settings_page.dart';
 
@@ -14,7 +15,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[HomeScreen(), BookmarkPage(), SettingsPage()];
+  static const List<Widget> _widgetOptions = <Widget>[HomeScreen(), BookmarkPage(), SettingsPage(), GamePage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -59,6 +60,11 @@ class _LandingPageState extends State<LandingPage> {
               icon: Icon(HugeIcons.strokeRoundedFloppyDisk),
               selectedIcon: Icon(HugeIcons.strokeRoundedFloppyDisk),
               label: 'Saved',
+            ),
+            NavigationDestination(
+              icon: Icon(HugeIcons.strokeRoundedGame),
+              selectedIcon: Icon(HugeIcons.strokeRoundedGame),
+              label: 'Games',
             ),
             NavigationDestination(
               icon: Icon(HugeIcons.strokeRoundedSettings01),
