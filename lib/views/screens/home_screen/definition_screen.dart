@@ -18,7 +18,7 @@ class DefinitionScreen extends StatefulWidget {
 class _DefinitionScreenState extends State<DefinitionScreen> {
   bool _isAudioPlaying = false;
   late AudioPlayer _audioPlayer;
-  bool _isPosMenuExpanded = false;
+  // bool _isPosMenuExpanded = false;
   final DictionaryApiService _service = DictionaryApiService();
   late Future<WordEntryDTO> _wordDTOFuture;
 
@@ -214,12 +214,13 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Word, IPA, POS card
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 24.0),
-                    child: Column(
-                      children: [
-                        // word, IPA, audio
-                        Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // word, IPA, audio
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
@@ -324,123 +325,194 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                             ),
                           ],
                         ),
+                      ),
 
-                        const SizedBox(height: 16.0),
-
-                        // part of speech
-                        AnimatedSize(
-                          duration: const Duration(milliseconds: 250),
-                          clipBehavior: Clip.antiAlias,
-                          alignment: Alignment.topCenter,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isPosMenuExpanded = !_isPosMenuExpanded;
-                              });
-                            },
+                      // POS title card
+                      Row(
+                        children: [
+                          Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.surface,
-                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        isDark
-                                            ? Colors.black.withValues(alpha: 0.25)
-                                            : Colors.grey.withValues(alpha: 0.25),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    blurStyle: BlurStyle.normal,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ],
+                                color:
+                                    isDark
+                                        ? theme.colorScheme.surface
+                                        : theme.colorScheme.primary.withValues(alpha: 0.9),
                               ),
                               clipBehavior: Clip.antiAlias,
-                              child: Column(
-                                children: [
-                                  // selected item
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(16.0, 4.0, 8.0, 4.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          _selectedMeaning?.partOfSpeech ?? '',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              _isPosMenuExpanded = !_isPosMenuExpanded;
-                                            });
-                                          },
-                                          icon: Icon(
-                                            _isPosMenuExpanded
-                                                ? Icons.arrow_drop_up_outlined
-                                                : Icons.arrow_drop_down_outlined,
-                                            color: Colors.black,
-                                            size: 22.0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+                                child: Text(
+                                  'Part of speech  (${wordEntry.meanings?.length})',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
+                                    fontSize: 16.0,
                                   ),
-
-                                  _isPosMenuExpanded
-                                      ? SizedBox(height: 0.0, child: Divider(color: Colors.grey.withValues(alpha: 0.5)))
-                                      : const SizedBox(),
-                                  // other items
-                                  _isPosMenuExpanded
-                                      ? Column(
-                                        children:
-                                            meanings.map((meaning) {
-                                              return Container(
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      meaning == _selectedMeaning
-                                                          ? theme.colorScheme.secondary.withValues(alpha: 0.4)
-                                                          : Colors.transparent,
-                                                ),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      _selectedMeaning = meaning;
-                                                      _isPosMenuExpanded = false;
-                                                      _updateSensesSetState();
-                                                    });
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          meaning.partOfSpeech ?? '',
-                                                          style: GoogleFonts.poppins(
-                                                            fontSize: 16,
-                                                            fontWeight: FontWeight.w600,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }).toList(),
-                                      )
-                                      : Container(),
-                                ],
+                                ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+
+                      // part of speech
+                      // Padding(
+                      //   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                      //   child: AnimatedSize(
+                      //     duration: const Duration(milliseconds: 250),
+                      //     clipBehavior: Clip.antiAlias,
+                      //     alignment: Alignment.topCenter,
+                      //     child: GestureDetector(
+                      //       onTap: () {
+                      //         setState(() {
+                      //           _isPosMenuExpanded = !_isPosMenuExpanded;
+                      //         });
+                      //       },
+                      //       child: Container(
+                      //         decoration: BoxDecoration(
+                      //           color: theme.colorScheme.surface,
+                      //           borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      //           boxShadow: [
+                      //             BoxShadow(
+                      //               color:
+                      //                   isDark
+                      //                       ? Colors.black.withValues(alpha: 0.25)
+                      //                       : Colors.grey.withValues(alpha: 0.25),
+                      //               spreadRadius: 2,
+                      //               blurRadius: 5,
+                      //               blurStyle: BlurStyle.normal,
+                      //               offset: const Offset(1, 1),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         clipBehavior: Clip.antiAlias,
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           mainAxisAlignment: MainAxisAlignment.start,
+                      //           children: [
+                      //             // selected item
+                      //             Padding(
+                      //               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 8.0, 4.0),
+                      //               child: Row(
+                      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //                 children: [
+                      //                   Text(
+                      //                     _selectedMeaning?.partOfSpeech ?? '',
+                      //                     style: GoogleFonts.poppins(
+                      //                       fontSize: 16,
+                      //                       fontWeight: FontWeight.w600,
+                      //                       color: Colors.black,
+                      //                     ),
+                      //                   ),
+                      //                   IconButton(
+                      //                     onPressed: () {
+                      //                       setState(() {
+                      //                         _isPosMenuExpanded = !_isPosMenuExpanded;
+                      //                       });
+                      //                     },
+                      //                     icon: Icon(
+                      //                       _isPosMenuExpanded
+                      //                           ? Icons.arrow_drop_up_outlined
+                      //                           : Icons.arrow_drop_down_outlined,
+                      //                       color: Colors.black,
+                      //                       size: 22.0,
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //
+                      //             _isPosMenuExpanded
+                      //                 ? SizedBox(height: 0.0, child: Divider(color: Colors.grey.withValues(alpha: 0.5)))
+                      //                 : const SizedBox(),
+                      //             // other items
+                      //             _isPosMenuExpanded
+                      //                 ? Column(
+                      //                   children:
+                      //                       meanings.map((meaning) {
+                      //                         return Container(
+                      //                           clipBehavior: Clip.antiAlias,
+                      //                           decoration: BoxDecoration(
+                      //                             color:
+                      //                                 meaning == _selectedMeaning
+                      //                                     ? theme.colorScheme.primary.withValues(alpha: 0.9)
+                      //                                     : Colors.transparent,
+                      //                           ),
+                      //                           child: InkWell(
+                      //                             onTap: () {
+                      //                               setState(() {
+                      //                                 _selectedMeaning = meaning;
+                      //                                 _isPosMenuExpanded = false;
+                      //                                 _updateSensesSetState();
+                      //                               });
+                      //                             },
+                      //                             child: Padding(
+                      //                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                      //                               child: Row(
+                      //                                 children: [
+                      //                                   Text(
+                      //                                     meaning.partOfSpeech ?? '',
+                      //                                     style: GoogleFonts.poppins(
+                      //                                       fontSize: 16,
+                      //                                       fontWeight: FontWeight.w600,
+                      //                                       color:
+                      //                                           meaning == _selectedMeaning
+                      //                                               ? Colors.white
+                      //                                               : Colors.black,
+                      //                                     ),
+                      //                                   ),
+                      //                                 ],
+                      //                               ),
+                      //                             ),
+                      //                           ),
+                      //                         );
+                      //                       }).toList(),
+                      //                 )
+                      //                 : Container(),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          spacing: 4.0,
+                          runSpacing: 4.0,
+                          children:
+                              meanings.map((meaning) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedMeaning = meaning;
+                                      _updateSensesSetState();
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          meaning == _selectedMeaning
+                                              ? theme.colorScheme.secondary
+                                              : Colors.grey.shade600,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: Text(
+                                      meaning.partOfSpeech ?? '',
+                                      style: GoogleFonts.merriweather(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
 
                   // Senses
@@ -558,14 +630,29 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                     Row(
                                                       children: [
                                                         Expanded(
-                                                          child: Text(
-                                                            '${_toRoman(index + 1)}. $example',
-                                                            style: GoogleFonts.merriweather(
-                                                              fontSize: 12,
-                                                              // height: 1.5,
-                                                              color: theme.textTheme.bodyLarge?.color?.withValues(
-                                                                alpha: 0.8,
-                                                              ),
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                  text: '${_toRoman(index + 1)}.',
+                                                                  style: GoogleFonts.merriweather(
+                                                                    fontSize: 11,
+                                                                    fontWeight: FontWeight.w600,
+                                                                    color: theme.textTheme.bodyLarge?.color?.withValues(
+                                                                      alpha: 0.8,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                TextSpan(
+                                                                  text: ' $example',
+                                                                  style: GoogleFonts.merriweather(
+                                                                    fontSize: 11,
+                                                                    color: theme.textTheme.bodyLarge?.color?.withValues(
+                                                                      alpha: 0.8,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
