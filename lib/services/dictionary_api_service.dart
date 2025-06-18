@@ -16,7 +16,7 @@ class DictionaryApiService {
     try {
       final response = await _dio.get('/definitions/en/$word');
       return WordEntryDTO.fromJson(response.data as Map<String, dynamic>);
-    } on DioException catch (e) {
+    } on DioException {
       // throw Exception('Failed to fetch definition: ${e.message}');
       rethrow;
     }
