@@ -95,12 +95,12 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                             if (entry != null) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.of(
-                                    context,
-                                  ).push(MaterialPageRoute(builder: (context) => DefinitionScreen(wordEntry: entry)));
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => DefinitionScreen(word: entry.word ?? '')),
+                                  );
                                 },
                                 child: Hero(
-                                  tag: 'wordOfTheDay',
+                                  tag: 'definitions',
                                   child: Material(
                                     color: Colors.transparent,
                                     child: Icon(
