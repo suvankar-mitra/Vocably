@@ -219,113 +219,116 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                     children: [
                       // word, IPA, audio
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // word
-                                Text(
-                                  wordEntry.word ?? '',
-                                  style: GoogleFonts.merriweather(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26.0,
-                                    color: theme.textTheme.bodyLarge?.color,
-                                  ),
-                                ),
-                                const SizedBox(height: 8.0),
-                                // ipa
-                                if ((wordEntry.ipa ?? '').isNotEmpty)
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // word
                                   Text(
-                                    '[ ${wordEntry.ipa ?? ''} ]',
+                                    wordEntry.word ?? '',
                                     style: GoogleFonts.merriweather(
-                                      fontSize: 14.0,
-                                      color: theme.textTheme.bodyMedium?.color,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 26.0,
+                                      color: theme.textTheme.bodyLarge?.color,
                                     ),
                                   ),
-                              ],
-                            ),
-                            // audio
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  // play the media if available
-                                  String mediaUrl = wordEntry.audioUrl ?? '';
-                                  _playAudio(mediaUrl);
-                                  setState(() {
-                                    _isAudioPlaying = true;
-                                  });
-                                },
-                                child:
-                                    _isAudioPlaying
-                                        ? TweenAnimationBuilder<double>(
-                                          // Animate when playing
-                                          tween: Tween<double>(begin: 1.5, end: 1.0), // Example: scale tween
-                                          duration: const Duration(milliseconds: 500),
-                                          builder: (context, scale, child) {
-                                            return Transform.scale(scale: scale, child: child);
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: theme.colorScheme.surface,
-                                              shape: BoxShape.circle,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color:
-                                                      isDark
-                                                          ? Colors.black.withValues(alpha: 0.25)
-                                                          : Colors.grey.withValues(alpha: 0.25),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 5,
-                                                  blurStyle: BlurStyle.normal,
-                                                  offset: const Offset(1, 1),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                HugeIcons.strokeRoundedVolumeHigh,
-                                                color: theme.colorScheme.secondary, // Highlight color
-                                                size: 22.0,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        : Container(
-                                          decoration: BoxDecoration(
-                                            color: theme.colorScheme.surface,
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color:
-                                                    isDark
-                                                        ? Colors.black.withValues(alpha: 0.25)
-                                                        : Colors.grey.withValues(alpha: 0.25),
-                                                spreadRadius: 1,
-                                                blurRadius: 5,
-                                                blurStyle: BlurStyle.normal,
-                                                offset: const Offset(1, 1),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(
-                                              HugeIcons.strokeRoundedVolumeHigh,
-                                              color: theme.colorScheme.secondary, // Highlight color
-                                              size: 22.0,
-                                            ),
-                                          ),
-                                        ),
+                                  const SizedBox(height: 8.0),
+                                  // ipa
+                                  if ((wordEntry.ipa ?? '').isNotEmpty)
+                                    Text(
+                                      wordEntry.ipa ?? '',
+                                      style: GoogleFonts.merriweather(
+                                        fontSize: 14.0,
+                                        color: theme.textTheme.bodyMedium?.color,
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
+                      // audio
+                      if (wordEntry.audioUrl != null && wordEntry.audioUrl!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              // play the media if available
+                              String mediaUrl = wordEntry.audioUrl ?? '';
+                              _playAudio(mediaUrl);
+                              setState(() {
+                                _isAudioPlaying = true;
+                              });
+                            },
+                            child:
+                                _isAudioPlaying
+                                    ? TweenAnimationBuilder<double>(
+                                      // Animate when playing
+                                      tween: Tween<double>(begin: 1.5, end: 1.0), // Example: scale tween
+                                      duration: const Duration(milliseconds: 500),
+                                      builder: (context, scale, child) {
+                                        return Transform.scale(scale: scale, child: child);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: theme.colorScheme.surface,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  isDark
+                                                      ? Colors.black.withValues(alpha: 0.25)
+                                                      : Colors.grey.withValues(alpha: 0.25),
+                                              spreadRadius: 1,
+                                              blurRadius: 5,
+                                              blurStyle: BlurStyle.normal,
+                                              offset: const Offset(1, 1),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            HugeIcons.strokeRoundedVolumeHigh,
+                                            color: theme.colorScheme.secondary, // Highlight color
+                                            size: 22.0,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    : Container(
+                                      decoration: BoxDecoration(
+                                        color: theme.colorScheme.surface,
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                isDark
+                                                    ? Colors.black.withValues(alpha: 0.25)
+                                                    : Colors.grey.withValues(alpha: 0.25),
+                                            spreadRadius: 1,
+                                            blurRadius: 5,
+                                            blurStyle: BlurStyle.normal,
+                                            offset: const Offset(1, 1),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          HugeIcons.strokeRoundedVolumeHigh,
+                                          color: theme.colorScheme.secondary, // Highlight color
+                                          size: 22.0,
+                                        ),
+                                      ),
+                                    ),
+                          ),
+                        ),
 
                       // POS title card
                       Row(
