@@ -199,7 +199,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                             entry.word ?? '',
                             style: GoogleFonts.merriweather(
                               fontWeight: FontWeight.bold,
-                              fontSize: 22.0,
+                              fontSize: 16.0,
                               color: theme.textTheme.bodyLarge?.color,
                             ),
                           ),
@@ -293,7 +293,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                 text: TextSpan(
                                   text: entry.meanings?.first.senses?.first.glosses?.first ?? 'No definition found',
                                   style: GoogleFonts.merriweather(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     height: 1.5,
                                     color: theme.textTheme.bodyLarge?.color,
                                   ),
