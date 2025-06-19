@@ -74,8 +74,6 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
         setState(() {
           _suggestions = results;
           _loading = false;
-          print("============");
-          print(_suggestions);
         });
       } catch (e) {
         setState(() {
@@ -207,23 +205,16 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            HugeIcons.strokeRoundedSearch02,
-                                            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
-                                            size: 14.0,
-                                          ),
-                                          const SizedBox(width: 12.0),
-                                          RichText(
-                                            text: TextSpan(
-                                              text: suggestion,
-                                              style: GoogleFonts.poppins(
-                                                color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.9),
-                                              ),
+                                      Expanded(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: suggestion,
+                                            style: GoogleFonts.poppins(
+                                              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.9),
                                             ),
                                           ),
-                                        ],
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                       Icon(HugeIcons.strokeRoundedArrowUpRight02),
                                     ],
