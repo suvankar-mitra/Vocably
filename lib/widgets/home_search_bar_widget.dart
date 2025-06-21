@@ -92,17 +92,19 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(width: 1.5, color: _isFocused ? Colors.grey : Colors.transparent),
         boxShadow: [
-          _isFocused
+          !_isFocused
               ? BoxShadow(
-                color: Colors.black87.withValues(alpha: 0.3),
-                spreadRadius: 2,
+                color: Colors.grey.withValues(alpha: 0.35),
+                spreadRadius: 1,
                 blurRadius: 5,
                 offset: const Offset(0, 1),
               )
               : BoxShadow(),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child:
           _isFocused
               ? Column(
