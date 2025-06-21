@@ -18,7 +18,7 @@ class DefinitionScreen extends StatefulWidget {
 class _DefinitionScreenState extends State<DefinitionScreen> {
   bool _isAudioPlaying = false;
   late AudioPlayer _audioPlayer;
-  // bool _isPosMenuExpanded = false;
+  bool _isPosMenuExpanded = false;
   final DictionaryApiService _service = DictionaryApiService();
   late Future<WordEntryDTO> _wordDTOFuture;
 
@@ -86,18 +86,12 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
           borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(16.0), bottomRight: Radius.circular(16.0)),
           child: AppBar(
             clipBehavior: Clip.antiAlias,
-            title: Hero(
-              tag: 'definitions',
-              child: Material(
-                color: Colors.transparent,
-                child: Text(
-                  'Definitions',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
-                  ),
-                ),
+            title: Text(
+              'Definitions',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
               ),
             ),
             automaticallyImplyLeading: false,
@@ -123,8 +117,8 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             // Future is still loading
             return Center(
               child: SizedBox(
-                height: 100,
-                width: 100,
+                height: 200,
+                width: 200,
                 child: Lottie.asset('assets/lottie/lottie_wait_animation_blue.json'),
               ),
             );
@@ -215,17 +209,17 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                 children: [
                   // Word, IPA, POS card
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // word, IPA, audio
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Flexible(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   // word
                                   Text(
@@ -283,11 +277,11 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                               color:
                                                   isDark
                                                       ? Colors.black.withValues(alpha: 0.25)
-                                                      : Colors.grey.withValues(alpha: 0.25),
+                                                      : Colors.grey.withValues(alpha: 0.20),
                                               spreadRadius: 1,
                                               blurRadius: 5,
                                               blurStyle: BlurStyle.normal,
-                                              offset: const Offset(1, 1),
+                                              offset: const Offset(0, 1),
                                             ),
                                           ],
                                         ),
@@ -310,11 +304,11 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                             color:
                                                 isDark
                                                     ? Colors.black.withValues(alpha: 0.25)
-                                                    : Colors.grey.withValues(alpha: 0.25),
+                                                    : Colors.grey.withValues(alpha: 0.20),
                                             spreadRadius: 1,
                                             blurRadius: 5,
                                             blurStyle: BlurStyle.normal,
-                                            offset: const Offset(1, 1),
+                                            offset: const Offset(0, 1),
                                           ),
                                         ],
                                       ),
@@ -359,126 +353,126 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                       ),
 
                       // part of speech
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                      //   child: AnimatedSize(
-                      //     duration: const Duration(milliseconds: 250),
-                      //     clipBehavior: Clip.antiAlias,
-                      //     alignment: Alignment.topCenter,
-                      //     child: GestureDetector(
-                      //       onTap: () {
-                      //         setState(() {
-                      //           _isPosMenuExpanded = !_isPosMenuExpanded;
-                      //         });
-                      //       },
-                      //       child: Container(
-                      //         decoration: BoxDecoration(
-                      //           color: theme.colorScheme.surface,
-                      //           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      //           boxShadow: [
-                      //             BoxShadow(
-                      //               color:
-                      //                   isDark
-                      //                       ? Colors.black.withValues(alpha: 0.25)
-                      //                       : Colors.grey.withValues(alpha: 0.25),
-                      //               spreadRadius: 2,
-                      //               blurRadius: 5,
-                      //               blurStyle: BlurStyle.normal,
-                      //               offset: const Offset(1, 1),
-                      //             ),
-                      //           ],
-                      //         ),
-                      //         clipBehavior: Clip.antiAlias,
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           mainAxisAlignment: MainAxisAlignment.start,
-                      //           children: [
-                      //             // selected item
-                      //             Padding(
-                      //               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 8.0, 4.0),
-                      //               child: Row(
-                      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //                 children: [
-                      //                   Text(
-                      //                     _selectedMeaning?.partOfSpeech ?? '',
-                      //                     style: GoogleFonts.poppins(
-                      //                       fontSize: 16,
-                      //                       fontWeight: FontWeight.w600,
-                      //                       color: Colors.black,
-                      //                     ),
-                      //                   ),
-                      //                   IconButton(
-                      //                     onPressed: () {
-                      //                       setState(() {
-                      //                         _isPosMenuExpanded = !_isPosMenuExpanded;
-                      //                       });
-                      //                     },
-                      //                     icon: Icon(
-                      //                       _isPosMenuExpanded
-                      //                           ? Icons.arrow_drop_up_outlined
-                      //                           : Icons.arrow_drop_down_outlined,
-                      //                       color: Colors.black,
-                      //                       size: 22.0,
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //
-                      //             _isPosMenuExpanded
-                      //                 ? SizedBox(height: 0.0, child: Divider(color: Colors.grey.withValues(alpha: 0.5)))
-                      //                 : const SizedBox(),
-                      //             // other items
-                      //             _isPosMenuExpanded
-                      //                 ? Column(
-                      //                   children:
-                      //                       meanings.map((meaning) {
-                      //                         return Container(
-                      //                           clipBehavior: Clip.antiAlias,
-                      //                           decoration: BoxDecoration(
-                      //                             color:
-                      //                                 meaning == _selectedMeaning
-                      //                                     ? theme.colorScheme.primary.withValues(alpha: 0.9)
-                      //                                     : Colors.transparent,
-                      //                           ),
-                      //                           child: InkWell(
-                      //                             onTap: () {
-                      //                               setState(() {
-                      //                                 _selectedMeaning = meaning;
-                      //                                 _isPosMenuExpanded = false;
-                      //                                 _updateSensesSetState();
-                      //                               });
-                      //                             },
-                      //                             child: Padding(
-                      //                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                      //                               child: Row(
-                      //                                 children: [
-                      //                                   Text(
-                      //                                     meaning.partOfSpeech ?? '',
-                      //                                     style: GoogleFonts.poppins(
-                      //                                       fontSize: 16,
-                      //                                       fontWeight: FontWeight.w600,
-                      //                                       color:
-                      //                                           meaning == _selectedMeaning
-                      //                                               ? Colors.white
-                      //                                               : Colors.black,
-                      //                                     ),
-                      //                                   ),
-                      //                                 ],
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         );
-                      //                       }).toList(),
-                      //                 )
-                      //                 : Container(),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                        child: AnimatedSize(
+                          duration: const Duration(milliseconds: 250),
+                          clipBehavior: Clip.antiAlias,
+                          alignment: Alignment.topCenter,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isPosMenuExpanded = !_isPosMenuExpanded;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surface,
+                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        isDark
+                                            ? Colors.black.withValues(alpha: 0.25)
+                                            : Colors.grey.withValues(alpha: 0.25),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    blurStyle: BlurStyle.normal,
+                                    offset: const Offset(1, 1),
+                                  ),
+                                ],
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  // selected item
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(16.0, 4.0, 8.0, 4.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          _selectedMeaning?.partOfSpeech ?? '',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isPosMenuExpanded = !_isPosMenuExpanded;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            _isPosMenuExpanded
+                                                ? Icons.arrow_drop_up_outlined
+                                                : Icons.arrow_drop_down_outlined,
+                                            color: Colors.black,
+                                            size: 22.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  _isPosMenuExpanded
+                                      ? SizedBox(height: 0.0, child: Divider(color: Colors.grey.withValues(alpha: 0.5)))
+                                      : const SizedBox(),
+                                  // other items
+                                  _isPosMenuExpanded
+                                      ? Column(
+                                        children:
+                                            meanings.map((meaning) {
+                                              return Container(
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      meaning == _selectedMeaning
+                                                          ? theme.colorScheme.primary.withValues(alpha: 0.9)
+                                                          : Colors.transparent,
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _selectedMeaning = meaning;
+                                                      _isPosMenuExpanded = false;
+                                                      _updateSensesSetState();
+                                                    });
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          meaning.partOfSpeech ?? '',
+                                                          style: GoogleFonts.poppins(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w600,
+                                                            color:
+                                                                meaning == _selectedMeaning
+                                                                    ? Colors.white
+                                                                    : Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                      )
+                                      : Container(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      /*Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Wrap(
                           alignment: WrapAlignment.start,
@@ -514,7 +508,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                 );
                               }).toList(),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
 
