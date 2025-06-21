@@ -203,6 +203,20 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             final List<MeaningDTO> meanings = wordEntry.meanings ?? []; // Get meanings from resolved data
             final List<SoundDTO> soundDTOs = wordEntry.sounds ?? [];
 
+            final defaultExampleStyle = GoogleFonts.merriweather(
+              fontSize: 11,
+              color: theme.textTheme.bodyLarge?.color?.withAlpha((0.8 * 255).round()), // Using withAlpha for clarity
+            );
+
+            final highlightExampleStyle = GoogleFonts.merriweather(
+              fontSize: 11,
+              // color: theme.colorScheme.secondary, // Example: Different text color for highlight
+              backgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.3), // Example: Background highlight
+              fontWeight: FontWeight.bold, // Example: Bold for highlight
+              // You can also use the same color as defaultExampleStyle if only changing background or weight
+              color: theme.textTheme.bodyLarge?.color?.withAlpha((0.8 * 255).round()),
+            );
+
             final List<Widget> soundTextWidgets =
                 soundDTOs
                     .where((sound) => (sound.ipa ?? '').isNotEmpty)
@@ -307,83 +321,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                           ],
                         ),
                       ),
-                      // audio
-                      // if (wordEntry.audioUrl != null && wordEntry.audioUrl!.isNotEmpty)
-                      //   Padding(
-                      //     padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                      //     child: GestureDetector(
-                      //       onTap: () {
-                      //         // play the media if available
-                      //         String mediaUrl = wordEntry.audioUrl ?? '';
-                      //         _playAudio(mediaUrl);
-                      //         setState(() {
-                      //           _isAudioPlaying = true;
-                      //         });
-                      //       },
-                      //       child:
-                      //           _isAudioPlaying
-                      //               ? TweenAnimationBuilder<double>(
-                      //                 // Animate when playing
-                      //                 tween: Tween<double>(begin: 1.5, end: 1.0), // Example: scale tween
-                      //                 duration: const Duration(milliseconds: 500),
-                      //                 builder: (context, scale, child) {
-                      //                   return Transform.scale(scale: scale, child: child);
-                      //                 },
-                      //                 child: Container(
-                      //                   decoration: BoxDecoration(
-                      //                     color: theme.colorScheme.surface,
-                      //                     shape: BoxShape.circle,
-                      //                     boxShadow: [
-                      //                       BoxShadow(
-                      //                         color:
-                      //                             isDark
-                      //                                 ? Colors.black.withValues(alpha: 0.25)
-                      //                                 : Colors.grey.withValues(alpha: 0.20),
-                      //                         spreadRadius: 1,
-                      //                         blurRadius: 5,
-                      //                         blurStyle: BlurStyle.normal,
-                      //                         offset: const Offset(0, 1),
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                   child: Padding(
-                      //                     padding: const EdgeInsets.all(8.0),
-                      //                     child: Icon(
-                      //                       HugeIcons.strokeRoundedVolumeHigh,
-                      //                       color: theme.colorScheme.secondary, // Highlight color
-                      //                       size: 22.0,
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               )
-                      //               : Container(
-                      //                 decoration: BoxDecoration(
-                      //                   color: theme.colorScheme.surface,
-                      //                   shape: BoxShape.circle,
-                      //                   boxShadow: [
-                      //                     BoxShadow(
-                      //                       color:
-                      //                           isDark
-                      //                               ? Colors.black.withValues(alpha: 0.25)
-                      //                               : Colors.grey.withValues(alpha: 0.20),
-                      //                       spreadRadius: 1,
-                      //                       blurRadius: 5,
-                      //                       blurStyle: BlurStyle.normal,
-                      //                       offset: const Offset(0, 1),
-                      //                     ),
-                      //                   ],
-                      //                 ),
-                      //                 child: Padding(
-                      //                   padding: const EdgeInsets.all(8.0),
-                      //                   child: Icon(
-                      //                     HugeIcons.strokeRoundedVolumeHigh,
-                      //                     color: theme.colorScheme.secondary, // Highlight color
-                      //                     size: 22.0,
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //     ),
-                      //   ),
 
                       // POS title card
                       Row(
@@ -701,14 +638,12 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                TextSpan(
-                                                                  text: ' $example',
-                                                                  style: GoogleFonts.merriweather(
-                                                                    fontSize: 11,
-                                                                    color: theme.textTheme.bodyLarge?.color?.withValues(
-                                                                      alpha: 0.8,
-                                                                    ),
-                                                                  ),
+
+                                                                ..._highlightWordsContainingQuery(
+                                                                  ' $example',
+                                                                  _wordEntry?.word ?? '',
+                                                                  defaultExampleStyle,
+                                                                  highlightExampleStyle,
                                                                 ),
                                                               ],
                                                             ),
@@ -978,5 +913,47 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
       }
     }
     return result;
+  }
+
+  List<TextSpan> _highlightWordsContainingQuery(
+    String source,
+    String query,
+    TextStyle defaultStyle,
+    TextStyle highlightStyle,
+  ) {
+    if (query.isEmpty || source.isEmpty) {
+      return [TextSpan(text: source, style: defaultStyle)];
+    }
+
+    // Find whole words that contain the query
+    // \w* matches zero or more word characters
+    // This looks for a word that has:
+    // - optional word characters before the query
+    // - the query itself
+    // - optional word characters after the query
+    final String escapedQuery = RegExp.escape(query);
+    final RegExp pattern = RegExp(
+      r'\b\w*' + escapedQuery + r'\w*\b', // Match a word containing the query
+      caseSensitive: false,
+    );
+
+    final List<TextSpan> spans = [];
+    int currentPosition = 0;
+
+    for (final Match match in pattern.allMatches(source)) {
+      // Add text before the match
+      if (match.start > currentPosition) {
+        spans.add(TextSpan(text: source.substring(currentPosition, match.start), style: defaultStyle));
+      }
+      // Add the highlighted match (the whole word that contained the query)
+      spans.add(TextSpan(text: source.substring(match.start, match.end), style: highlightStyle));
+      currentPosition = match.end;
+    }
+
+    // Add remaining text
+    if (currentPosition < source.length) {
+      spans.add(TextSpan(text: source.substring(currentPosition), style: defaultStyle));
+    }
+    return spans.isEmpty ? [TextSpan(text: source, style: defaultStyle)] : spans;
   }
 }
