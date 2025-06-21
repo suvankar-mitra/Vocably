@@ -16,7 +16,6 @@ class DefinitionScreen extends StatefulWidget {
 }
 
 class _DefinitionScreenState extends State<DefinitionScreen> {
-  bool _isAudioPlaying = false;
   late AudioPlayer _audioPlayer;
   bool _isPosMenuExpanded = false;
   final DictionaryApiService _service = DictionaryApiService();
@@ -202,6 +201,65 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             }
 
             final List<MeaningDTO> meanings = wordEntry.meanings ?? []; // Get meanings from resolved data
+            final List<SoundDTO> soundDTOs = wordEntry.sounds ?? [];
+
+            final List<Widget> soundTextWidgets =
+                soundDTOs
+                    .where((sound) => (sound.ipa ?? '').isNotEmpty)
+                    .map<Widget>(
+                      (sound) => Padding(
+                        // map to Widget
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                        child: Text(
+                          sound.ipa!,
+                          style: GoogleFonts.merriweather(fontSize: 14.0, color: theme.colorScheme.primary),
+                        ),
+                      ),
+                    )
+                    .toList();
+
+            final List<Widget> audioWidgets =
+                soundDTOs
+                    .where((sound) => (sound.mp3Url ?? '').isNotEmpty)
+                    .map<Widget>(
+                      (sound) => Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            // play the media if available
+                            String mediaUrl = sound.mp3Url ?? '';
+                            _playAudio(mediaUrl);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surface,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      isDark
+                                          ? Colors.black.withValues(alpha: 0.25)
+                                          : Colors.grey.withValues(alpha: 0.20),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                  blurStyle: BlurStyle.normal,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                HugeIcons.strokeRoundedVolumeHigh,
+                                color: theme.colorScheme.secondary, // Highlight color
+                                size: 22.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList();
 
             return SingleChildScrollView(
               child: Column(
@@ -231,15 +289,18 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 8.0),
-                                  // ipa
-                                  if ((wordEntry.ipa ?? '').isNotEmpty)
-                                    Text(
-                                      wordEntry.ipa ?? '',
-                                      style: GoogleFonts.merriweather(
-                                        fontSize: 14.0,
-                                        color: theme.textTheme.bodyMedium?.color,
+                                  if (soundTextWidgets.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                      child: Wrap(
+                                        spacing: 8.0,
+                                        runSpacing: 4.0,
+                                        alignment: WrapAlignment.start,
+                                        children: soundTextWidgets,
                                       ),
                                     ),
+                                  if (audioWidgets.isNotEmpty)
+                                    Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
                                 ],
                               ),
                             ),
@@ -247,82 +308,82 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                         ),
                       ),
                       // audio
-                      if (wordEntry.audioUrl != null && wordEntry.audioUrl!.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // play the media if available
-                              String mediaUrl = wordEntry.audioUrl ?? '';
-                              _playAudio(mediaUrl);
-                              setState(() {
-                                _isAudioPlaying = true;
-                              });
-                            },
-                            child:
-                                _isAudioPlaying
-                                    ? TweenAnimationBuilder<double>(
-                                      // Animate when playing
-                                      tween: Tween<double>(begin: 1.5, end: 1.0), // Example: scale tween
-                                      duration: const Duration(milliseconds: 500),
-                                      builder: (context, scale, child) {
-                                        return Transform.scale(scale: scale, child: child);
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: theme.colorScheme.surface,
-                                          shape: BoxShape.circle,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  isDark
-                                                      ? Colors.black.withValues(alpha: 0.25)
-                                                      : Colors.grey.withValues(alpha: 0.20),
-                                              spreadRadius: 1,
-                                              blurRadius: 5,
-                                              blurStyle: BlurStyle.normal,
-                                              offset: const Offset(0, 1),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Icon(
-                                            HugeIcons.strokeRoundedVolumeHigh,
-                                            color: theme.colorScheme.secondary, // Highlight color
-                                            size: 22.0,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                    : Container(
-                                      decoration: BoxDecoration(
-                                        color: theme.colorScheme.surface,
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                isDark
-                                                    ? Colors.black.withValues(alpha: 0.25)
-                                                    : Colors.grey.withValues(alpha: 0.20),
-                                            spreadRadius: 1,
-                                            blurRadius: 5,
-                                            blurStyle: BlurStyle.normal,
-                                            offset: const Offset(0, 1),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          HugeIcons.strokeRoundedVolumeHigh,
-                                          color: theme.colorScheme.secondary, // Highlight color
-                                          size: 22.0,
-                                        ),
-                                      ),
-                                    ),
-                          ),
-                        ),
+                      // if (wordEntry.audioUrl != null && wordEntry.audioUrl!.isNotEmpty)
+                      //   Padding(
+                      //     padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                      //     child: GestureDetector(
+                      //       onTap: () {
+                      //         // play the media if available
+                      //         String mediaUrl = wordEntry.audioUrl ?? '';
+                      //         _playAudio(mediaUrl);
+                      //         setState(() {
+                      //           _isAudioPlaying = true;
+                      //         });
+                      //       },
+                      //       child:
+                      //           _isAudioPlaying
+                      //               ? TweenAnimationBuilder<double>(
+                      //                 // Animate when playing
+                      //                 tween: Tween<double>(begin: 1.5, end: 1.0), // Example: scale tween
+                      //                 duration: const Duration(milliseconds: 500),
+                      //                 builder: (context, scale, child) {
+                      //                   return Transform.scale(scale: scale, child: child);
+                      //                 },
+                      //                 child: Container(
+                      //                   decoration: BoxDecoration(
+                      //                     color: theme.colorScheme.surface,
+                      //                     shape: BoxShape.circle,
+                      //                     boxShadow: [
+                      //                       BoxShadow(
+                      //                         color:
+                      //                             isDark
+                      //                                 ? Colors.black.withValues(alpha: 0.25)
+                      //                                 : Colors.grey.withValues(alpha: 0.20),
+                      //                         spreadRadius: 1,
+                      //                         blurRadius: 5,
+                      //                         blurStyle: BlurStyle.normal,
+                      //                         offset: const Offset(0, 1),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                   child: Padding(
+                      //                     padding: const EdgeInsets.all(8.0),
+                      //                     child: Icon(
+                      //                       HugeIcons.strokeRoundedVolumeHigh,
+                      //                       color: theme.colorScheme.secondary, // Highlight color
+                      //                       size: 22.0,
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               )
+                      //               : Container(
+                      //                 decoration: BoxDecoration(
+                      //                   color: theme.colorScheme.surface,
+                      //                   shape: BoxShape.circle,
+                      //                   boxShadow: [
+                      //                     BoxShadow(
+                      //                       color:
+                      //                           isDark
+                      //                               ? Colors.black.withValues(alpha: 0.25)
+                      //                               : Colors.grey.withValues(alpha: 0.20),
+                      //                       spreadRadius: 1,
+                      //                       blurRadius: 5,
+                      //                       blurStyle: BlurStyle.normal,
+                      //                       offset: const Offset(0, 1),
+                      //                     ),
+                      //                   ],
+                      //                 ),
+                      //                 child: Padding(
+                      //                   padding: const EdgeInsets.all(8.0),
+                      //                   child: Icon(
+                      //                     HugeIcons.strokeRoundedVolumeHigh,
+                      //                     color: theme.colorScheme.secondary, // Highlight color
+                      //                     size: 22.0,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //     ),
+                      //   ),
 
                       // POS title card
                       Row(
@@ -883,14 +944,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     try {
       // For remote URLs
       await _audioPlayer.play(UrlSource(mediaUrl));
-
-      _audioPlayer.onPlayerStateChanged.listen((state) {
-        if (mounted) {
-          setState(() {
-            _isAudioPlaying = state == PlayerState.playing;
-          });
-        }
-      });
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error playing audio: ${e.toString()}')));
