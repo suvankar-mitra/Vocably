@@ -10,8 +10,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    // final theme = Theme.of(context);
+    // final isDark = theme.brightness == Brightness.dark;
 
     final Map<String, List<String>> historyMap = {
       'June 15': ['readable', 'resource', 'make believe', ''],
@@ -20,34 +20,25 @@ class HomeScreen extends StatelessWidget {
     };
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppConstants.appName)),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: ClipRRect(
+          clipBehavior: Clip.antiAlias,
+          borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(16.0), bottomRight: Radius.circular(16.0)),
+          child: AppBar(title: Text(AppConstants.appName)),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Search bar
-            Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary,
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16.0), bottomRight: Radius.circular(16.0)),
-
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    blurStyle: BlurStyle.normal,
-                    offset: const Offset(1, 1),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 24.0),
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds: 300),
-                  alignment: Alignment.topCenter,
-                  curve: Curves.easeOut,
-                  child: HomeSearchBarWidget(),
-                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 0.0),
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                alignment: Alignment.topCenter,
+                curve: Curves.easeOut,
+                child: HomeSearchBarWidget(),
               ),
             ),
 
