@@ -209,6 +209,29 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             final List<MeaningDTO> meanings = wordEntry.meanings ?? []; // Get meanings from resolved data
             final List<SoundDTO> soundDTOs = wordEntry.sounds ?? [];
 
+            final List<String> gayWords = [
+              'gay',
+              'lesbian',
+              'bisexual',
+              'transgender',
+              'trans',
+              'transsexual',
+              'nonbinary',
+              'non-binary',
+              'genderqueer',
+              'genderfluid',
+              'agender',
+              'asexual',
+              'queer',
+              'intersex',
+              'pansexual',
+              'demisexual',
+              'pride',
+              'rainbow',
+            ];
+            bool isGayOn =
+                gayWords.contains(wordEntry.word?.toLowerCase()) || wordEntry.word!.toLowerCase().startsWith('lgbt');
+
             final defaultExampleStyle = GoogleFonts.merriweather(
               fontSize: 11,
               color: theme.textTheme.bodyLarge?.color?.withAlpha((0.8 * 255).round()), // Using withAlpha for clarity
@@ -227,7 +250,13 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                       (sound) => Padding(
                         // map to Widget
                         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-                        child: Text(sound.ipa!, style: GoogleFonts.merriweather(fontSize: 12.0)),
+                        child: Text(
+                          sound.ipa!,
+                          style: GoogleFonts.merriweather(
+                            fontSize: 12.0,
+                            color: isGayOn ? Colors.white : Colors.black54,
+                          ),
+                        ),
                       ),
                     )
                     .toList();
@@ -253,10 +282,13 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                         children: [
                           Icon(
                             HugeIcons.strokeRoundedVolumeHigh,
-                            color: theme.colorScheme.secondary, // Highlight color
+                            color: isGayOn ? Colors.white : theme.colorScheme.secondary, // Highlight color
                             size: 18.0,
                           ),
-                          Text('${index + 1}', style: GoogleFonts.poppins(fontSize: 8.0, color: Colors.black54)),
+                          Text(
+                            '${index + 1}',
+                            style: GoogleFonts.poppins(fontSize: 8.0, color: isGayOn ? Colors.white54 : Colors.black54),
+                          ),
                         ],
                       ),
                     ),
@@ -275,11 +307,31 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.surface,
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(width: 1.2, color: theme.primaryColor),
-                          ),
+                          decoration:
+                              isGayOn
+                                  ? BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.red.shade700,
+                                        Colors.orange.shade700,
+                                        Colors.yellow.shade700,
+                                        Colors.green.shade700,
+                                        Colors.blue.shade700,
+                                        Colors.indigo.shade700,
+                                        Colors.purple.shade700,
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(width: 1.2, color: Colors.transparent),
+                                  )
+                                  : BoxDecoration(
+                                    color: theme.colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(width: 1.2, color: theme.primaryColor),
+                                  ),
+                          clipBehavior: Clip.antiAlias,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -297,7 +349,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                             style: GoogleFonts.merriweather(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 22.0,
-                                              color: theme.textTheme.bodyLarge?.color,
+                                              color: isGayOn ? Colors.white : theme.textTheme.bodyLarge?.color,
                                             ),
                                           ),
                                         ),
@@ -438,43 +490,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                           ),
                         ),
                       ),
-                      /*Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          spacing: 4.0,
-                          runSpacing: 4.0,
-                          children:
-                              meanings.map((meaning) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedMeaning = meaning;
-                                      _updateSensesSetState();
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          meaning == _selectedMeaning
-                                              ? theme.colorScheme.secondary
-                                              : Colors.grey.shade600,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    child: Text(
-                                      meaning.partOfSpeech ?? '',
-                                      style: GoogleFonts.merriweather(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                        ),
-                      ),*/
                     ],
                   ),
 
