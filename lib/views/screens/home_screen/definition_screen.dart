@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vocably/models/translation_dto.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/utils/utilities.dart';
@@ -22,11 +23,14 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   bool _isPosMenuExpanded = false;
   final DictionaryApiService _service = DictionaryApiService();
   late Future<WordEntryDTO> _wordDTOFuture;
+  late Future<List<TranslationDTO>> _translationDTOFuture;
 
   // To hold the resolved WordEntryDTO and selected meaning once the Future completes
   WordEntryDTO? _wordEntry;
   MeaningDTO? _selectedMeaning;
   List<SenseDTO>? _currentSenses;
+
+  TranslationDTO? _selectedTranslation;
 
   @override
   void initState() {
@@ -48,6 +52,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     if (wordEntry.meanings != null && wordEntry.meanings!.isNotEmpty) {
       _selectedMeaning = wordEntry.meanings!.first;
       _updateSenses();
+      _updateTranslation();
     } else {
       _selectedMeaning = MeaningDTO(); // Fallback if no meanings
       _currentSenses = [];
@@ -60,6 +65,17 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
     } else {
       _currentSenses = [];
     }
+  }
+
+  void _initializeTranslation(List<TranslationDTO> translations) {
+    _selectedTranslation = translations.first;
+    print("===========_initializeTranslation called==============");
+  }
+
+  void _updateTranslation() {
+    // Get the translations
+    _translationDTOFuture = _service.getTranslations(widget.word, _selectedMeaning?.partOfSpeech ?? '');
+    _selectedTranslation = null;
   }
 
   void _updateSensesSetState() {
@@ -459,11 +475,13 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                       _selectedMeaning = meaning;
                                                       _isPosMenuExpanded = false;
                                                       _updateSensesSetState();
+                                                      _updateTranslation();
                                                     });
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                                                     child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Text(
                                                           Utilities.getFullPartOfSpeech(meaning.partOfSpeech ?? ''),
@@ -476,6 +494,15 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                     : Colors.black,
                                                           ),
                                                         ),
+                                                        if (meaning == _selectedMeaning)
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(right: 8.0),
+                                                            child: Icon(
+                                                              Icons.check_circle,
+                                                              color: Colors.white,
+                                                              size: 20,
+                                                            ),
+                                                          ),
                                                       ],
                                                     ),
                                                   ),
@@ -878,6 +905,195 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                               ),
                         ],
                       ),
+                      const SizedBox(height: 16.0),
+
+                      // translations
+                      FutureBuilder<List<TranslationDTO>>(
+                        future: _translationDTOFuture,
+                        builder: (BuildContext innerContext, AsyncSnapshot<List<TranslationDTO>> snapshot) {
+                          if (snapshot.hasData) {
+                            List<TranslationDTO>? translations = snapshot.data;
+
+                            if (translations != null && translations.isNotEmpty) {
+                              // sort translations by lang
+                              translations.sort((a, b) => a.lang!.compareTo(b.lang!));
+
+                              if (_selectedTranslation == null) {
+                                _initializeTranslation(translations);
+                              }
+
+                              return Column(
+                                children: [
+                                  // title card
+                                  _getTitleCard(isDark, theme, 'Translations (${translations.length})'),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // open bottom sheet
+                                        showModalBottomSheet(
+                                          context: innerContext,
+                                          builder: (BuildContext context) {
+                                            return Container(
+                                              constraints: BoxConstraints(
+                                                maxHeight:
+                                                    MediaQuery.of(context).size.height *
+                                                    0.7, // e.g., max 70% of screen height
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: theme.scaffoldBackgroundColor,
+                                                borderRadius: const BorderRadius.vertical(
+                                                  top: Radius.circular(16.0),
+                                                ), // Matches shape
+                                              ),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          'Translation Language', // Your Title
+                                                          style: GoogleFonts.poppins(
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 16.0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                  Expanded(
+                                                    child: ListView.builder(
+                                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                                      shrinkWrap: true,
+                                                      itemCount: translations.length,
+                                                      itemBuilder: (BuildContext innerContext2, int index) {
+                                                        final translation = translations[index];
+                                                        final isSelected = translation == _selectedTranslation;
+
+                                                        return Padding(
+                                                          padding: const EdgeInsets.symmetric(
+                                                            horizontal: 16,
+                                                            vertical: 4,
+                                                          ),
+                                                          child: Material(
+                                                            borderRadius: BorderRadius.circular(8),
+                                                            color: isSelected ? Colors.purple.shade50 : Colors.white,
+                                                            child: ListTile(
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(12),
+                                                              ),
+                                                              title: Text(
+                                                                translation.lang ?? '',
+                                                                style: GoogleFonts.poppins(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      isSelected ? FontWeight.w600 : FontWeight.w400,
+                                                                  color:
+                                                                      isSelected
+                                                                          ? Colors.purple
+                                                                          : Theme.of(
+                                                                            innerContext2,
+                                                                          ).textTheme.bodyLarge?.color,
+                                                                ),
+                                                              ),
+                                                              trailing:
+                                                                  isSelected
+                                                                      ? const Icon(
+                                                                        Icons.check_circle,
+                                                                        color: Colors.purple,
+                                                                        size: 20,
+                                                                      )
+                                                                      : null,
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _selectedTranslation = translation;
+                                                                });
+                                                                Navigator.of(innerContext2).pop();
+                                                              },
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: theme.colorScheme.surface,
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          border: Border.all(width: 1.2, color: theme.primaryColor),
+                                        ),
+                                        clipBehavior: Clip.antiAlias,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        _selectedTranslation?.lang ?? '',
+                                                        style: GoogleFonts.poppins(
+                                                          fontSize: 12,
+                                                          color: theme.textTheme.bodyLarge?.color,
+                                                        ),
+                                                      ),
+                                                      Icon(Icons.arrow_drop_down_outlined, size: 18.0),
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        _selectedTranslation?.word ?? '',
+                                                        style: GoogleFonts.merriweather(
+                                                          fontSize: 14,
+                                                          height: 1.5,
+                                                          color: theme.textTheme.bodyLarge?.color,
+                                                        ),
+                                                      ),
+                                                      if (_selectedTranslation?.roman != null)
+                                                        Text(
+                                                          _selectedTranslation?.roman ?? '',
+                                                          style: GoogleFonts.merriweather(
+                                                            fontSize: 14,
+                                                            height: 1.5,
+                                                            color: theme.textTheme.bodyLarge?.color,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+
                       const SizedBox(height: 16.0),
 
                       // attribute text
