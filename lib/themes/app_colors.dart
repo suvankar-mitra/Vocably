@@ -54,26 +54,31 @@ class AppColors {
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: Color(0xFFF5F5F5), // backgroundColor
+  // scaffoldBackgroundColor: Color(0xffe0e0e0),
   cardColor: Color(0xFFFFFFFF), // cardBackgroundColor
   appBarTheme: AppBarTheme(
-    backgroundColor: Color(0xFF3F38A8), // searchBarBackgroundDark
-    iconTheme: IconThemeData(color: Color(0xFFFF6F91)), // primaryTextColorDark
-    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
+    // backgroundColor: Color(0xFF3F38A8), // searchBarBackgroundDark
+    backgroundColor: Color(0xFF5F3DC4), // searchBarBackgroundDark
+    iconTheme: IconThemeData(color: Color(0xFFFF6B81)), // primaryTextColorDark
+    // titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFF6F91)),
+    titleTextStyle: GoogleFonts.playfairDisplay(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFF6B81)),
     centerTitle: true,
+    elevation: 2,
   ),
   navigationBarTheme: NavigationBarThemeData(
     elevation: 2,
     // height: 64.0,
-    backgroundColor: Color(0xFFFFFFFF),
+    // backgroundColor: Color(0xFFFFFFFF),
+    backgroundColor: Colors.transparent,
     labelTextStyle: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         // Selected label style
-        return GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFFFF6F91));
+        return GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFFFF6B81));
       }
       // Unselected label style
       return GoogleFonts.poppins(fontSize: 12, color: const Color(0xFFB2B2B2));
     }),
-    labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+    labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
     iconTheme: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         // Selected icon style
@@ -82,7 +87,7 @@ final ThemeData lightTheme = ThemeData(
       // Unselected icon style
       return IconThemeData(color: const Color(0xFFB2B2B2));
     }),
-    indicatorColor: Color(0xFFFF6F91),
+    indicatorColor: Color(0xFFFF6B81),
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Color(0xFF2E2E2E)), // primaryTextColor
@@ -92,10 +97,11 @@ final ThemeData lightTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: TextStyle(color: Color(0xFF6D5D7A)), // searchBarHintColor
   ),
-  iconTheme: IconThemeData(color: Color(0xFFFF6F91)), // primaryAccentColor
+  iconTheme: IconThemeData(color: Color(0xFFFF6B81)), // primaryAccentColor
   colorScheme: ColorScheme.light(
-    primary: Color(0xFF3F38A8), // primaryAccentColor
-    secondary: Color(0xFFFF6F91),
+    // primary: Color(0xFF3F38A8), // primaryAccentColor
+    primary: Color(0xFF5F3DC4), // primaryAccentColor
+    secondary: Color(0xFFFF6B81),
     surface: Color(0xFFFFFFFF),
     onPrimary: Colors.white,
     onSecondary: Colors.black,
