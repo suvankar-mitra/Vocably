@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
+import 'package:vocably/utils/utilities.dart';
 
 class DefinitionScreen extends StatefulWidget {
   final String word;
@@ -116,8 +118,8 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             // Future is still loading
             return Center(
               child: SizedBox(
-                height: 200,
-                width: 200,
+                height: 150,
+                width: 150,
                 child: Lottie.asset('assets/lottie/lottie_wait_animation_blue.json'),
               ),
             );
@@ -146,50 +148,54 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(16.0),
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(16.0),
 
-                      boxShadow: [
-                        BoxShadow(
-                          color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          blurStyle: BlurStyle.normal,
-                          offset: const Offset(1, 1),
-                        ),
-                      ],
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      blurStyle: BlurStyle.normal,
+                      offset: const Offset(1, 1),
                     ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            errorMessage,
-                            style: GoogleFonts.poppins(color: Colors.red, fontWeight: FontWeight.bold),
+                  ],
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Expanded(
+                              child: Text(
+                                errorMessage,
+                                style: GoogleFonts.poppins(color: Colors.red, fontWeight: FontWeight.bold),
+                              ),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Lottie.asset('assets/lottie/lottie_nothing_found_blue.json'),
-                        ),
-                        FilledButton(
-                          onPressed: _retry,
-                          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(theme.colorScheme.primary)),
-                          child: Text('Retry', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Lottie.asset('assets/lottie/lottie_nothing_found_blue.json'),
+                          ),
+                          if (statusCode != 404)
+                            FilledButton(
+                              onPressed: _retry,
+                              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(theme.colorScheme.primary)),
+                              child: Text('Retry', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           } else if (snapshot.hasData) {
@@ -210,10 +216,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
 
             final highlightExampleStyle = GoogleFonts.merriweather(
               fontSize: 11,
-              // color: theme.colorScheme.secondary, // Example: Different text color for highlight
-              backgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.3), // Example: Background highlight
-              fontWeight: FontWeight.bold, // Example: Bold for highlight
-              // You can also use the same color as defaultExampleStyle if only changing background or weight
+              fontWeight: FontWeight.w600,
               color: theme.textTheme.bodyLarge?.color?.withAlpha((0.8 * 255).round()),
             );
 
@@ -224,56 +227,41 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                       (sound) => Padding(
                         // map to Widget
                         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-                        child: Text(
-                          sound.ipa!,
-                          style: GoogleFonts.merriweather(fontSize: 14.0, color: theme.colorScheme.primary),
-                        ),
+                        child: Text(sound.ipa!, style: GoogleFonts.merriweather(fontSize: 12.0)),
                       ),
                     )
                     .toList();
 
+            final List<SoundDTO> filteredSoundDTOs =
+                soundDTOs.where((sound) => (sound.mp3Url ?? '').isNotEmpty).toList();
+
             final List<Widget> audioWidgets =
-                soundDTOs
-                    .where((sound) => (sound.mp3Url ?? '').isNotEmpty)
-                    .map<Widget>(
-                      (sound) => Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // play the media if available
-                            String mediaUrl = sound.mp3Url ?? '';
-                            _playAudio(mediaUrl);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.surface,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      isDark
-                                          ? Colors.black.withValues(alpha: 0.25)
-                                          : Colors.grey.withValues(alpha: 0.20),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  blurStyle: BlurStyle.normal,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                HugeIcons.strokeRoundedVolumeHigh,
-                                color: theme.colorScheme.secondary, // Highlight color
-                                size: 22.0,
-                              ),
-                            ),
+                filteredSoundDTOs.asMap().entries.map<Widget>((entry) {
+                  final int index = entry.key;
+                  final SoundDTO sound = entry.value;
+                  return GestureDetector(
+                    onTap: () {
+                      // play the media if available
+                      String mediaUrl = sound.mp3Url ?? '';
+                      _playAudio(mediaUrl);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            HugeIcons.strokeRoundedVolumeHigh,
+                            color: theme.colorScheme.secondary, // Highlight color
+                            size: 18.0,
                           ),
-                        ),
+                          Text('${index + 1}', style: GoogleFonts.poppins(fontSize: 8.0, color: Colors.black54)),
+                        ],
                       ),
-                    )
-                    .toList();
+                    ),
+                  );
+                }).toList();
 
             return SingleChildScrollView(
               child: Column(
@@ -285,70 +273,61 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                     children: [
                       // word, IPA, audio
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // word
-                                  Text(
-                                    wordEntry.word ?? '',
-                                    style: GoogleFonts.merriweather(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 26.0,
-                                      color: theme.textTheme.bodyLarge?.color,
+                        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8.0),
+                            border: Border.all(width: 1.2, color: theme.primaryColor),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // word
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            wordEntry.word ?? '',
+                                            style: GoogleFonts.merriweather(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 22.0,
+                                              color: theme.textTheme.bodyLarge?.color,
+                                            ),
+                                          ),
+                                        ),
+                                        // if (audioWidgets.isNotEmpty)
+                                        //   Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(height: 8.0),
-                                  if (soundTextWidgets.isNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                                      child: Wrap(
-                                        spacing: 8.0,
-                                        runSpacing: 4.0,
-                                        alignment: WrapAlignment.start,
-                                        children: soundTextWidgets,
+                                    if (audioWidgets.isNotEmpty)
+                                      Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
+                                    // const SizedBox(height: 8.0),
+                                    if (soundTextWidgets.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                        child: Wrap(
+                                          spacing: 8.0,
+                                          runSpacing: 4.0,
+                                          alignment: WrapAlignment.start,
+                                          children: soundTextWidgets,
+                                        ),
                                       ),
-                                    ),
-                                  if (audioWidgets.isNotEmpty)
-                                    Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
 
                       // POS title card
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    isDark
-                                        ? theme.colorScheme.surface
-                                        : theme.colorScheme.primary.withValues(alpha: 0.9),
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-                                child: Text(
-                                  'Part of speech  (${wordEntry.meanings?.length})',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      _getTitleCard(isDark, theme, 'Part of speech  (${wordEntry.meanings?.length})'),
 
                       // part of speech
                       Padding(
@@ -367,18 +346,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.surface,
                                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        isDark
-                                            ? Colors.black.withValues(alpha: 0.25)
-                                            : Colors.grey.withValues(alpha: 0.25),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    blurStyle: BlurStyle.normal,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ],
+                                border: Border.all(width: 1.2, color: theme.primaryColor),
                               ),
                               clipBehavior: Clip.antiAlias,
                               child: Column(
@@ -392,9 +360,9 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          _selectedMeaning?.partOfSpeech ?? '',
+                                          Utilities.getFullPartOfSpeech(_selectedMeaning?.partOfSpeech ?? ''),
                                           style: GoogleFonts.poppins(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                             color: Colors.black,
                                           ),
@@ -409,7 +377,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                             _isPosMenuExpanded
                                                 ? Icons.arrow_drop_up_outlined
                                                 : Icons.arrow_drop_down_outlined,
-                                            color: Colors.black,
+                                            color: theme.colorScheme.secondary,
                                             size: 22.0,
                                           ),
                                         ),
@@ -446,9 +414,9 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                     child: Row(
                                                       children: [
                                                         Text(
-                                                          meaning.partOfSpeech ?? '',
+                                                          Utilities.getFullPartOfSpeech(meaning.partOfSpeech ?? ''),
                                                           style: GoogleFonts.poppins(
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             fontWeight: FontWeight.w600,
                                                             color:
                                                                 meaning == _selectedMeaning
@@ -514,33 +482,9 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                   Column(
                     children: [
                       // title card
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    isDark
-                                        ? theme.colorScheme.surface
-                                        : theme.colorScheme.primary.withValues(alpha: 0.9),
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-                                child: Text(
-                                  'Glosses  (${_currentSenses!.length})',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0),
+                      _getTitleCard(isDark, theme, 'Glosses  (${_currentSenses!.length})'),
+
+                      // const SizedBox(height: 8.0),
                       // glosses
                       Column(
                         children: [
@@ -549,254 +493,327 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                               final index = wordEntry.key;
                               final sense = wordEntry.value;
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // glosses
-                                  ...sense.glosses!.asMap().entries.map((wordEntry) {
-                                    // final index = wordEntry.key;
-                                    final gloss = wordEntry.value;
-                                    return Padding(
-                                      padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text: '${index + 1}. ',
-                                                    style: GoogleFonts.merriweather(
-                                                      fontSize: 18,
-                                                      height: 1.5,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: theme.textTheme.bodyLarge?.color,
-                                                    ),
+                              return Padding(
+                                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(width: 1.2, color: theme.primaryColor),
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // glosses
+                                      ...sense.glosses!.asMap().entries.map((wordEntry) {
+                                        // final index = wordEntry.key;
+                                        final gloss = wordEntry.value;
+                                        return Padding(
+                                          padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: '${index + 1}. ',
+                                                        style: GoogleFonts.merriweather(
+                                                          fontSize: 16,
+                                                          height: 1.5,
+                                                          fontWeight: FontWeight.w600,
+                                                          color: theme.textTheme.bodyLarge?.color,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: gloss,
+                                                        style: GoogleFonts.merriweather(
+                                                          fontSize: 14,
+                                                          height: 1.5,
+                                                          color: theme.textTheme.bodyLarge?.color,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  TextSpan(
-                                                    text: gloss,
-                                                    style: GoogleFonts.merriweather(
-                                                      fontSize: 14,
-                                                      height: 1.5,
-                                                      color: theme.textTheme.bodyLarge?.color,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+
+                                      // examples
+                                      if (sense.examples != null && sense.examples!.isNotEmpty)
+                                        Column(
+                                          children: [
+                                            const SizedBox(height: 8.0),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Examples:',
+                                                      style: GoogleFonts.merriweather(
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-
-                                  // examples
-                                  if (sense.examples != null && sense.examples!.isNotEmpty)
-                                    Column(
-                                      children: [
-                                        const SizedBox(height: 8.0),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'Examples',
-                                                  style: GoogleFonts.merriweather(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4.0),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 32.0, right: 16.0),
-                                          child: Column(
-                                            children: [
-                                              ...sense.examples!.asMap().entries.map((wordEntry) {
-                                                final index = wordEntry.key;
-                                                final example = wordEntry.value;
-                                                return Column(
-                                                  children: [
-                                                    Row(
+                                            const SizedBox(height: 4.0),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 32.0, right: 16.0),
+                                              child: Column(
+                                                children: [
+                                                  ...sense.examples!.asMap().entries.map((wordEntry) {
+                                                    final index = wordEntry.key;
+                                                    final example = wordEntry.value;
+                                                    return Column(
                                                       children: [
-                                                        Expanded(
-                                                          child: RichText(
-                                                            text: TextSpan(
-                                                              children: [
-                                                                TextSpan(
-                                                                  text: '${_toRoman(index + 1)}.',
-                                                                  style: GoogleFonts.merriweather(
-                                                                    fontSize: 11,
-                                                                    fontWeight: FontWeight.w600,
-                                                                    color: theme.textTheme.bodyLarge?.color?.withValues(
-                                                                      alpha: 0.8,
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: RichText(
+                                                                text: TextSpan(
+                                                                  children: [
+                                                                    TextSpan(
+                                                                      text: '${_toRoman(index + 1)}.',
+                                                                      style: GoogleFonts.merriweather(
+                                                                        fontSize: 11,
+                                                                        fontWeight: FontWeight.w600,
+                                                                        color: theme.textTheme.bodyLarge?.color
+                                                                            ?.withValues(alpha: 0.8),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ),
 
-                                                                ..._highlightWordsContainingQuery(
-                                                                  ' $example',
-                                                                  _wordEntry?.word ?? '',
-                                                                  defaultExampleStyle,
-                                                                  highlightExampleStyle,
+                                                                    ..._highlightWordsContainingQuery(
+                                                                      ' $example',
+                                                                      _wordEntry?.word ?? '',
+                                                                      defaultExampleStyle,
+                                                                      highlightExampleStyle,
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                              ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+
+                                                        const SizedBox(height: 4.0),
+                                                      ],
+                                                    );
+                                                  }),
+
+                                                  // const SizedBox(height: 16.0),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                      // synonyms
+                                      if (sense.synonyms != null && sense.synonyms!.isNotEmpty)
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 8.0),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Synonyms:',
+                                                      style: GoogleFonts.merriweather(
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4.0),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                                              child: Wrap(
+                                                alignment: WrapAlignment.start,
+                                                spacing: 4.0,
+                                                runSpacing: 4.0,
+                                                children:
+                                                    sense.synonyms!.map((synonym) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                              builder: (context) => DefinitionScreen(word: synonym),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.symmetric(
+                                                            horizontal: 8.0,
+                                                            vertical: 4.0,
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0xFF597445),
+                                                            borderRadius: BorderRadius.circular(8.0),
+                                                          ),
+                                                          child: Text(
+                                                            synonym,
+                                                            style: GoogleFonts.merriweather(
+                                                              fontSize: 12,
+                                                              color: Colors.white,
                                                             ),
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-
-                                                    const SizedBox(height: 4.0),
-                                                  ],
-                                                );
-                                              }),
-
-                                              // const SizedBox(height: 16.0),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                  // synonyms
-                                  if (sense.synonyms != null && sense.synonyms!.isNotEmpty)
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 8.0),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'Synonyms',
-                                                  style: GoogleFonts.merriweather(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
-                                                  ),
-                                                ),
+                                                      );
+                                                    }).toList(),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(height: 4.0),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                                          child: Wrap(
-                                            alignment: WrapAlignment.start,
-                                            spacing: 4.0,
-                                            runSpacing: 4.0,
-                                            children:
-                                                sense.synonyms!.map((synonym) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                          builder: (context) => DefinitionScreen(word: synonym),
+                                      // antonyms
+                                      if (sense.antonyms != null && sense.antonyms!.isNotEmpty)
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 8.0),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Antonyms:',
+                                                      style: GoogleFonts.merriweather(
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4.0),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                                              child: Wrap(
+                                                alignment: WrapAlignment.start,
+                                                spacing: 4.0,
+                                                runSpacing: 4.0,
+                                                children:
+                                                    sense.antonyms!.map((antonym) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                              builder: (context) => DefinitionScreen(word: antonym),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.symmetric(
+                                                            horizontal: 8.0,
+                                                            vertical: 4.0,
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0xFFB06161),
+                                                            borderRadius: BorderRadius.circular(8.0),
+                                                          ),
+                                                          child: Text(
+                                                            antonym,
+                                                            style: GoogleFonts.merriweather(
+                                                              fontSize: 12,
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
                                                         ),
                                                       );
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(
-                                                        horizontal: 8.0,
-                                                        vertical: 4.0,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.green.shade400,
-                                                        borderRadius: BorderRadius.circular(8.0),
-                                                      ),
-                                                      child: Text(
-                                                        synonym,
-                                                        style: GoogleFonts.merriweather(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                        ),
+                                                    }).toList(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                      if (sense.related != null && sense.related!.isNotEmpty)
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 8.0),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Related:',
+                                                      style: GoogleFonts.merriweather(
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
                                                       ),
                                                     ),
-                                                  );
-                                                }).toList(),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  // antonyms
-                                  if (sense.antonyms != null && sense.antonyms!.isNotEmpty)
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 8.0),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'Antonyms',
-                                                  style: GoogleFonts.merriweather(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: theme.textTheme.bodyLarge?.color?.withValues(alpha: 0.8),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4.0),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                                          child: Wrap(
-                                            alignment: WrapAlignment.start,
-                                            spacing: 4.0,
-                                            runSpacing: 4.0,
-                                            children:
-                                                sense.antonyms!.map((antonym) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                          builder: (context) => DefinitionScreen(word: antonym),
+                                            ),
+                                            const SizedBox(height: 4.0),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                                              child: Wrap(
+                                                alignment: WrapAlignment.start,
+                                                spacing: 4.0,
+                                                runSpacing: 4.0,
+                                                children:
+                                                    sense.related!.map((related) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                              builder: (context) => DefinitionScreen(word: related),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.symmetric(
+                                                            horizontal: 8.0,
+                                                            vertical: 4.0,
+                                                          ),
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0xFFDE8F5F),
+                                                            borderRadius: BorderRadius.circular(8.0),
+                                                          ),
+                                                          child: Text(
+                                                            related,
+                                                            style: GoogleFonts.merriweather(
+                                                              fontSize: 12,
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
                                                         ),
                                                       );
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(
-                                                        horizontal: 8.0,
-                                                        vertical: 4.0,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.red.shade300,
-                                                        borderRadius: BorderRadius.circular(8.0),
-                                                      ),
-                                                      child: Text(
-                                                        antonym,
-                                                        style: GoogleFonts.merriweather(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }).toList(),
-                                          ),
+                                                    }).toList(),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
 
-                                  const SizedBox(height: 24.0),
-                                ],
+                                      const SizedBox(height: 16.0),
+                                    ],
+                                  ),
+                                ),
                               );
                             }),
 
-                          const SizedBox(height: 16.0),
+                          // const SizedBox(height: 16.0),
                         ],
                       ),
 
@@ -811,47 +828,60 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // title card
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color:
-                                                isDark
-                                                    ? theme.colorScheme.surface
-                                                    : theme.colorScheme.primary.withValues(alpha: 0.9),
-                                          ),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-                                            child: Text(
-                                              'Etymology',
-                                              style: GoogleFonts.poppins(
-                                                fontWeight: FontWeight.bold,
-                                                color:
-                                                    isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
-                                                fontSize: 16.0,
+                                  _getTitleCard(isDark, theme, 'Etymology'),
+
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: theme.colorScheme.surface,
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        border: Border.all(width: 1.2, color: theme.primaryColor),
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                // Prepend the number (index + 1) to the gloss
+                                                _selectedMeaning?.etymologyText ?? 'No etymology found',
+                                                style: GoogleFonts.merriweather(
+                                                  fontSize: 14,
+                                                  height: 1.5,
+                                                  color: theme.textTheme.bodyLarge?.color,
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
-                                    child: Text(
-                                      // Prepend the number (index + 1) to the gloss
-                                      _selectedMeaning?.etymologyText ?? 'No etymology found',
-                                      style: GoogleFonts.merriweather(
-                                        fontSize: 14,
-                                        height: 1.5,
-                                        color: theme.textTheme.bodyLarge?.color,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+
+                      // attribute text
+                      Column(
+                        children: [
+                          if (_wordEntry?.attribute != null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
+                                  child: Text(
+                                    // Prepend the number (index + 1) to the gloss
+                                    _wordEntry?.attribute?.api?.attributionText ?? 'No attribute found',
+                                    style: GoogleFonts.poppins(fontSize: 9, color: Colors.grey),
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ],
@@ -955,5 +985,72 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
       spans.add(TextSpan(text: source.substring(currentPosition), style: defaultStyle));
     }
     return spans.isEmpty ? [TextSpan(text: source, style: defaultStyle)] : spans;
+  }
+
+  Widget _getTitleCard(bool isDark, ThemeData theme, String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDark ? theme.colorScheme.surface : theme.primaryColor.withValues(alpha: 0.9),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+              child: Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
+                  fontSize: 14.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> launchGoogleSearch(String searchTerm) async {
+    if (searchTerm.isEmpty) {
+      // Optional: Show a message if the search term is empty, or just do nothing
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Search term is empty.')));
+      return;
+    }
+
+    // Construct the Google search URL
+    // We need to properly encode the search term to handle spaces and special characters.
+    final Uri googleSearchUrl = Uri.parse('https://www.google.com/search?q=${Uri.encodeComponent(searchTerm)}');
+
+    try {
+      if (await canLaunchUrl(googleSearchUrl)) {
+        await launchUrl(
+          googleSearchUrl,
+          mode: LaunchMode.inAppBrowserView, // Opens in the default browser
+        );
+      } else {
+        // Could not launch the URL (e.g., no browser installed, though unlikely on mobile)
+        // Show an error message to the user
+        if (mounted) {
+          // Check if the widget is still in the tree
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Could not open Google search for "$searchTerm"')));
+        }
+        // print('Could not launch $googleSearchUrl');
+      }
+    } catch (e) {
+      // Handle any other exceptions during launch
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error opening link: $e')));
+      }
+      // print('Error launching URL: $e');
+    }
   }
 }
