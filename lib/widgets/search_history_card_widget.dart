@@ -17,16 +17,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
-
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
-            spreadRadius: 1,
-            blurRadius: 5,
-            blurStyle: BlurStyle.normal,
-            offset: const Offset(1, 1),
-          ),
-        ],
+        border: Border.all(width: 1.2, color: theme.primaryColor),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -46,7 +37,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Search History',
+                          'Search History 🔍',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,

@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vocably/models/word_entry_dto.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
+import 'package:vocably/utils/utilities.dart';
 import 'package:vocably/views/screens/home_screen/definition_screen.dart';
 
 class WordOfTheDayWidget extends StatefulWidget {
@@ -51,16 +52,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
-
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
-            spreadRadius: 1,
-            blurRadius: 5,
-            blurStyle: BlurStyle.normal,
-            offset: const Offset(1, 1),
-          ),
-        ],
+        border: Border.all(width: 1.2, color: theme.primaryColor),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -80,7 +72,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Word of the day',
+                          'Word of the day 💡',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
@@ -211,7 +203,7 @@ class _WordOfTheDayWidgetState extends State<WordOfTheDayWidget> {
                                 Row(
                                   children: [
                                     Text(
-                                      entry.meanings?.first.partOfSpeech ?? '',
+                                      Utilities.getFullPartOfSpeech(entry.meanings?.first.partOfSpeech ?? ''),
                                       style: GoogleFonts.merriweather(
                                         fontSize: 14.0,
                                         color: theme.textTheme.bodyMedium?.color,

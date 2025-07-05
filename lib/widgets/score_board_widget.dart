@@ -20,16 +20,7 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
-
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? Colors.black.withValues(alpha: 0.25) : Colors.grey.withValues(alpha: 0.2),
-            spreadRadius: 1,
-            blurRadius: 5,
-            blurStyle: BlurStyle.normal,
-            offset: const Offset(1, 1),
-          ),
-        ],
+        border: Border.all(width: 1.2, color: theme.primaryColor),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -49,7 +40,7 @@ class _ScoreBoardWidgetState extends State<ScoreBoardWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Score card',
+                          'Score card 🏆',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             color: isDark ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
