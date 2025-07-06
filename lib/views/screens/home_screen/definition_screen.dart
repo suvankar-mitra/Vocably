@@ -997,7 +997,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                 borderRadius: BorderRadius.circular(12),
                                                               ),
                                                               title: Text(
-                                                                translation.lang ?? '',
+                                                                "${translation.lang ?? ''} (${translation.code ?? ''})",
                                                                 style: GoogleFonts.poppins(
                                                                   fontSize: 12,
                                                                   fontWeight:
@@ -1046,17 +1046,22 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
                                           child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        _selectedTranslation?.lang ?? '',
+                                                        "${_selectedTranslation?.lang ?? ''} (${_selectedTranslation?.code ?? ''})",
                                                         style: GoogleFonts.poppins(
                                                           fontSize: 12,
                                                           color: theme.textTheme.bodyLarge?.color,
@@ -1065,28 +1070,61 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                       Icon(Icons.arrow_drop_down_outlined, size: 18.0),
                                                     ],
                                                   ),
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        _selectedTranslation?.word ?? '',
-                                                        style: GoogleFonts.merriweather(
-                                                          fontSize: 14,
-                                                          height: 1.5,
-                                                          color: theme.textTheme.bodyLarge?.color,
-                                                        ),
-                                                      ),
-                                                      if (_selectedTranslation?.roman != null)
-                                                        Text(
-                                                          _selectedTranslation?.roman ?? '',
-                                                          style: GoogleFonts.merriweather(
-                                                            fontSize: 14,
-                                                            height: 1.5,
-                                                            color: theme.textTheme.bodyLarge?.color,
-                                                          ),
-                                                        ),
-                                                    ],
-                                                  ),
+                                                  if (_selectedTranslation != null &&
+                                                      _selectedTranslation?.translationSenses != null &&
+                                                      _selectedTranslation!.translationSenses!.isNotEmpty)
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children:
+                                                          _selectedTranslation!.translationSenses!.asMap().entries.map((
+                                                            translationSenseMapObject,
+                                                          ) {
+                                                            int index = translationSenseMapObject.key;
+                                                            final translationSense = translationSenseMapObject.value;
+                                                            return Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              children: [
+                                                                const SizedBox(height: 4),
+                                                                Text(
+                                                                  "${(index + 1)}. ${translationSense.word ?? ''}",
+                                                                  style: GoogleFonts.merriweather(
+                                                                    fontSize: 14,
+                                                                    color: theme.textTheme.bodyLarge?.color,
+                                                                    fontWeight: FontWeight.w600,
+                                                                  ),
+                                                                ),
+                                                                if (translationSense.roman != null)
+                                                                  Column(
+                                                                    children: [
+                                                                      const SizedBox(height: 2),
+                                                                      Text(
+                                                                        translationSense.roman ?? '',
+                                                                        style: GoogleFonts.merriweather(
+                                                                          fontSize: 10,
+                                                                          color: theme.textTheme.bodyLarge?.color,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                if (translationSense.sense != null)
+                                                                  Column(
+                                                                    children: [
+                                                                      const SizedBox(height: 2),
+                                                                      Text(
+                                                                        translationSense.sense ?? '',
+                                                                        style: GoogleFonts.merriweather(
+                                                                          fontSize: 10,
+                                                                          color: theme.textTheme.bodyLarge?.color,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                              ],
+                                                            );
+                                                          }).toList(),
+                                                    ),
                                                 ],
                                               ),
                                             ],
