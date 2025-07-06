@@ -29,7 +29,7 @@ class DictionaryApiService {
 
   Future<List<String>> getListWordsByFilter(String filter) async {
     try {
-      final response = await _dio.get('/words/en?', queryParameters: {'filter': filter, 'size': '5'});
+      final response = await _dio.get('/words/en/?', queryParameters: {'filter': filter, 'size': '5'});
       return (response.data as List<dynamic>).cast<String>();
     } on DioException catch (e) {
       throw Exception('Failed to fetch Filtered words: ${e.message}');
