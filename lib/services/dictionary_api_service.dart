@@ -6,7 +6,7 @@ class DictionaryApiService {
   final Dio _dio = Dio(
     BaseOptions(
       // baseUrl: 'http://fedora.taila978b4.ts.net:8800/dictionaryapi/v1',
-      baseUrl: 'http://skull-fedora.taila978b4.ts.net:8800/dictionaryapi/v1',
+      baseUrl: 'https://api.suvankar.cc/dictionaryapi/v1',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 60),
       contentType: 'JSON',
