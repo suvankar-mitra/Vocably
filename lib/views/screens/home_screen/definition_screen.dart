@@ -1070,6 +1070,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                       Icon(Icons.arrow_drop_down_outlined, size: 18.0),
                                                     ],
                                                   ),
+                                                  Divider(color: theme.dividerColor),
                                                   if (_selectedTranslation != null &&
                                                       _selectedTranslation?.translationSenses != null &&
                                                       _selectedTranslation!.translationSenses!.isNotEmpty)

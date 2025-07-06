@@ -56,6 +56,7 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Color(0xFFF5F5F5), // backgroundColor
   // scaffoldBackgroundColor: Color(0xffe0e0e0),
   cardColor: Color(0xFFFFFFFF), // cardBackgroundColor
+  dividerColor: Color(0xFFE0E0E0),
   appBarTheme: AppBarTheme(
     // backgroundColor: Color(0xFF3F38A8), // searchBarBackgroundDark
     backgroundColor: Color(0xFF5F3DC4), // searchBarBackgroundDark
