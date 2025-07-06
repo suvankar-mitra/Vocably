@@ -49,6 +49,12 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
   // Method to initialize/update selectedMeaning and senses once WordEntryDTO is available
   void _initializeMeaningAndSenses(WordEntryDTO wordEntry) {
     _wordEntry = wordEntry; // Store the resolved DTO
+    // sort meanings
+    wordEntry.meanings?.sort((a, b) {
+      final posA = Utilities.getFullPartOfSpeech(a.partOfSpeech ?? '');
+      final posB = Utilities.getFullPartOfSpeech(b.partOfSpeech ?? '');
+      return posA.compareTo(posB);
+    });
     if (wordEntry.meanings != null && wordEntry.meanings!.isNotEmpty) {
       _selectedMeaning = wordEntry.meanings!.first;
       _updateSenses();
@@ -69,7 +75,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
 
   void _initializeTranslation(List<TranslationDTO> translations) {
     _selectedTranslation = translations.first;
-    print("===========_initializeTranslation called==============");
   }
 
   void _updateTranslation() {
@@ -245,7 +250,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
               'pride',
               'rainbow',
             ];
-            bool isGayOn =
+            bool isGayThemeOn =
                 gayWords.contains(wordEntry.word?.toLowerCase()) || wordEntry.word!.toLowerCase().startsWith('lgbt');
 
             final defaultExampleStyle = GoogleFonts.merriweather(
@@ -270,7 +275,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                           sound.ipa!,
                           style: GoogleFonts.merriweather(
                             fontSize: 12.0,
-                            color: isGayOn ? Colors.white : Colors.black54,
+                            color: isGayThemeOn ? Colors.white : Colors.black54,
                           ),
                         ),
                       ),
@@ -298,12 +303,15 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                         children: [
                           Icon(
                             HugeIcons.strokeRoundedVolumeHigh,
-                            color: isGayOn ? Colors.white : theme.colorScheme.secondary, // Highlight color
+                            color: isGayThemeOn ? Colors.white : theme.colorScheme.secondary, // Highlight color
                             size: 18.0,
                           ),
                           Text(
                             '${index + 1}',
-                            style: GoogleFonts.poppins(fontSize: 8.0, color: isGayOn ? Colors.white54 : Colors.black54),
+                            style: GoogleFonts.poppins(
+                              fontSize: 8.0,
+                              color: isGayThemeOn ? Colors.white54 : Colors.black54,
+                            ),
                           ),
                         ],
                       ),
@@ -324,17 +332,17 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                         padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                         child: Container(
                           decoration:
-                              isGayOn
+                              isGayThemeOn
                                   ? BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        Colors.red.shade700,
-                                        Colors.orange.shade700,
-                                        Colors.yellow.shade700,
-                                        Colors.green.shade700,
-                                        Colors.blue.shade700,
-                                        Colors.indigo.shade700,
-                                        Colors.purple.shade700,
+                                        Colors.red.shade800,
+                                        Colors.orange.shade800,
+                                        Colors.yellow.shade800,
+                                        Colors.green.shade800,
+                                        Colors.blue.shade800,
+                                        Colors.indigo.shade800,
+                                        Colors.purple.shade800,
                                       ],
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
@@ -365,7 +373,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                             style: GoogleFonts.merriweather(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 22.0,
-                                              color: isGayOn ? Colors.white : theme.textTheme.bodyLarge?.color,
+                                              color: isGayThemeOn ? Colors.white : theme.textTheme.bodyLarge?.color,
                                             ),
                                           ),
                                         ),
@@ -936,9 +944,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                           builder: (BuildContext context) {
                                             return Container(
                                               constraints: BoxConstraints(
-                                                maxHeight:
-                                                    MediaQuery.of(context).size.height *
-                                                    0.7, // e.g., max 70% of screen height
+                                                maxHeight: MediaQuery.of(context).size.height * 0.7,
                                               ),
                                               decoration: BoxDecoration(
                                                 color: theme.scaffoldBackgroundColor,
@@ -982,7 +988,10 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                           ),
                                                           child: Material(
                                                             borderRadius: BorderRadius.circular(8),
-                                                            color: isSelected ? Colors.purple.shade50 : Colors.white,
+                                                            color:
+                                                                isSelected
+                                                                    ? theme.primaryColor.withValues(alpha: 0.9)
+                                                                    : Colors.white,
                                                             child: ListTile(
                                                               shape: RoundedRectangleBorder(
                                                                 borderRadius: BorderRadius.circular(12),
@@ -995,7 +1004,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                       isSelected ? FontWeight.w600 : FontWeight.w400,
                                                                   color:
                                                                       isSelected
-                                                                          ? Colors.purple
+                                                                          ? Colors.white
                                                                           : Theme.of(
                                                                             innerContext2,
                                                                           ).textTheme.bodyLarge?.color,
@@ -1005,7 +1014,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                   isSelected
                                                                       ? const Icon(
                                                                         Icons.check_circle,
-                                                                        color: Colors.purple,
+                                                                        color: Colors.white,
                                                                         size: 20,
                                                                       )
                                                                       : null,
