@@ -151,7 +151,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
             int? statusCode;
 
             if (error is DioException) {
-              // If you chose Option A (rethrowing DioException)
               errorMessage = 'API Error: ${error.message}';
               if (error.response != null) {
                 statusCode = error.response?.statusCode;
@@ -194,11 +193,9 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Expanded(
-                              child: Text(
-                                errorMessage,
-                                style: GoogleFonts.poppins(color: Colors.red, fontWeight: FontWeight.bold),
-                              ),
+                            child: Text(
+                              errorMessage,
+                              style: GoogleFonts.poppins(color: Colors.red, fontWeight: FontWeight.bold),
                             ),
                           ),
                           SizedBox(
@@ -356,48 +353,51 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                     border: Border.all(width: 1.2, color: theme.primaryColor),
                                   ),
                           clipBehavior: Clip.antiAlias,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    // word
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            wordEntry.word ?? '',
-                                            style: GoogleFonts.merriweather(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 22.0,
-                                              color: isGayThemeOn ? Colors.white : theme.textTheme.bodyLarge?.color,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      // word
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              wordEntry.word ?? '',
+                                              style: GoogleFonts.merriweather(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18.0,
+                                                color: isGayThemeOn ? Colors.white : theme.textTheme.bodyLarge?.color,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        // if (audioWidgets.isNotEmpty)
-                                        //   Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
-                                      ],
-                                    ),
-                                    if (audioWidgets.isNotEmpty)
-                                      Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
-                                    // const SizedBox(height: 8.0),
-                                    if (soundTextWidgets.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                                        child: Wrap(
-                                          spacing: 8.0,
-                                          runSpacing: 4.0,
-                                          alignment: WrapAlignment.start,
-                                          children: soundTextWidgets,
-                                        ),
+                                          // if (audioWidgets.isNotEmpty)
+                                          //   Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
+                                        ],
                                       ),
-                                  ],
+                                      if (audioWidgets.isNotEmpty)
+                                        Row(mainAxisAlignment: MainAxisAlignment.center, children: audioWidgets),
+                                      // const SizedBox(height: 8.0),
+                                      if (soundTextWidgets.isNotEmpty)
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                          child: Wrap(
+                                            spacing: 8.0,
+                                            runSpacing: 4.0,
+                                            alignment: WrapAlignment.start,
+                                            children: soundTextWidgets,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -997,7 +997,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                 borderRadius: BorderRadius.circular(12),
                                                               ),
                                                               title: Text(
-                                                                "${translation.lang ?? ''} (${translation.code ?? ''})",
+                                                                "${translation.lang ?? ''} (${translation.code ?? ''}) (${translation.translationSenses?.length ?? ''})",
                                                                 style: GoogleFonts.poppins(
                                                                   fontSize: 12,
                                                                   fontWeight:
@@ -1061,7 +1061,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        "${_selectedTranslation?.lang ?? ''} (${_selectedTranslation?.code ?? ''})",
+                                                        "${_selectedTranslation?.lang ?? ''} (${_selectedTranslation?.code ?? ''}) (${_selectedTranslation?.translationSenses?.length ?? ''})",
                                                         style: GoogleFonts.poppins(
                                                           fontSize: 12,
                                                           color: theme.textTheme.bodyLarge?.color,
@@ -1089,7 +1089,7 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                               children: [
                                                                 const SizedBox(height: 4),
                                                                 Text(
-                                                                  "${(index + 1)}. ${translationSense.word ?? ''}",
+                                                                  "${index + 1}. ${translationSense.word ?? ''}",
                                                                   style: GoogleFonts.merriweather(
                                                                     fontSize: 14,
                                                                     color: theme.textTheme.bodyLarge?.color,
@@ -1099,7 +1099,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                 if (translationSense.roman != null)
                                                                   Column(
                                                                     children: [
-                                                                      const SizedBox(height: 2),
                                                                       Text(
                                                                         translationSense.roman ?? '',
                                                                         style: GoogleFonts.merriweather(
@@ -1112,7 +1111,6 @@ class _DefinitionScreenState extends State<DefinitionScreen> {
                                                                 if (translationSense.sense != null)
                                                                   Column(
                                                                     children: [
-                                                                      const SizedBox(height: 2),
                                                                       Text(
                                                                         translationSense.sense ?? '',
                                                                         style: GoogleFonts.merriweather(
