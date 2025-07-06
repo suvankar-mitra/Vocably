@@ -16,7 +16,7 @@ class SearchHistoryCardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(8.0),
         border: Border.all(width: 1.2, color: theme.primaryColor),
       ),
       clipBehavior: Clip.antiAlias,
