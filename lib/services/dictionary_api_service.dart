@@ -8,18 +8,29 @@ class DictionaryApiService {
       // baseUrl: 'http://fedora.taila978b4.ts.net:8800/dictionaryapi/v1',
       baseUrl: 'https://api.suvankar.cc/dictionaryapi/v1',
       connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 120),
       contentType: 'JSON',
     ),
   );
 
   Future<WordEntryDTO> getDefinition(String word) async {
     try {
+      print("DEBUG: Getting definition for $word");
       final response = await _dio.get('/definitions/en/$word');
-      return WordEntryDTO.fromJson(response.data as Map<String, dynamic>);
+      if (response.statusCode == 200) {
+        print("DEBUG: Successfully fetched definition for $word");
+        print("RAW RESPONSE: ${response.data}");
+        WordEntryDTO wdto = WordEntryDTO.fromJson(response.data as Map<String, dynamic>);
+        print("DEBUG: Successfully parsed into WordEntryDTO");
+        return wdto;
+      }
+      return WordEntryDTO();
     } on DioException {
       // throw Exception('Failed to fetch definition: ${e.message}');
       rethrow;
+    } catch (e) {
+      print("DEBUG: Failed to fetch/parse definition: $e");
+      throw Exception('Failed to fetch/parse definition: $e');
     }
   }
 
