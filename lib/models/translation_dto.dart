@@ -1,44 +1,50 @@
-import 'dart:convert';
+class TranslationDTO {
+  String? lang;
+  String? code;
+  List<TranslationSenses>? translationSenses;
 
-// Helper function to decode the list from a JSON string
-List<TranslationDTO> translationDTOListFromJson(String str) {
-  if (str.isEmpty) return [];
-  final decoded = json.decode(str);
-  if (decoded is List) {
-    return List<TranslationDTO>.from(
-      decoded.map((x) {
-        if (x is Map<String, dynamic>) {
-          return TranslationDTO.fromJson(x);
-        }
-        throw FormatException("Invalid item type in JSON string list for TranslationDTO: ${x.runtimeType}");
-      }),
-    );
+  TranslationDTO({this.lang, this.code, this.translationSenses});
+
+  TranslationDTO.fromJson(Map<String, dynamic> json) {
+    lang = json['lang'];
+    code = json['code'];
+    if (json['translationSenses'] != null) {
+      translationSenses = <TranslationSenses>[];
+      json['translationSenses'].forEach((v) {
+        translationSenses!.add(new TranslationSenses.fromJson(v));
+      });
+    }
   }
-  throw FormatException("Expected a JSON list for TranslationDTOs, got: ${decoded.runtimeType}");
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['lang'] = this.lang;
+    data['code'] = this.code;
+    if (this.translationSenses != null) {
+      data['translationSenses'] = this.translationSenses!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-// Helper function to encode the list to a JSON string
-String translationDTOListToJson(List<TranslationDTO> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+class TranslationSenses {
+  String? sense;
+  String? roman;
+  String? word;
 
-class TranslationDTO {
-  final String? lang;
-  final String? code;
-  final String? sense;
-  final String? roman;
-  final String? word;
+  TranslationSenses({this.sense, this.roman, this.word});
 
-  TranslationDTO({this.lang, this.code, this.sense, this.roman, this.word});
-
-  factory TranslationDTO.fromJson(Map<String, dynamic> jsonMap) {
-    return TranslationDTO(
-      lang: jsonMap["lang"] as String?,
-      code: jsonMap["code"] as String?,
-      sense: jsonMap["sense"] as String?,
-      roman: jsonMap["roman"] as String?,
-      word: jsonMap["word"] as String?,
-    );
+  TranslationSenses.fromJson(Map<String, dynamic> json) {
+    sense = json['sense'];
+    roman = json['roman'];
+    word = json['word'];
   }
 
-  Map<String, dynamic> toJson() => {"lang": lang, "code": code, "sense": sense, "roman": roman, "word": word};
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['sense'] = this.sense;
+    data['roman'] = this.roman;
+    data['word'] = this.word;
+    return data;
+  }
 }
