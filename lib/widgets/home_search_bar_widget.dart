@@ -4,6 +4,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:vocably/services/dictionary_api_service.dart';
 import 'package:vocably/themes/app_colors.dart';
 import 'package:vocably/views/screens/home_screen/definition_screen.dart';
@@ -23,7 +24,7 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
   List<String> _suggestions = []; // suggestions provided by the API
   Timer? _debounce; // how long we wait before sending the request
   bool _loading = false;
-  String? _error;
+  // String? _error;
   late String _query;
 
   // Define a consistent vertical padding value
@@ -53,13 +54,13 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
     // wait for 400ms before sending the request
-    _debounce = Timer(const Duration(milliseconds: 400), () async {
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
       _query = _controller.text.trim();
 
       if (_query.isEmpty || _query.length < 2) {
         setState(() {
           _suggestions = [];
-          _error = null;
+          // _error = null;
         });
         return;
       }
@@ -67,7 +68,7 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
       // waiting for the response
       setState(() {
         _loading = true;
-        _error = null;
+        // _error = null;
       });
       try {
         final results = await _service.getListWordsByFilter(_query);
@@ -77,7 +78,7 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
         });
       } catch (e) {
         setState(() {
-          _error = e.toString();
+          // _error = e.toString();
           _loading = false;
         });
       }
@@ -151,7 +152,16 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
                     ),
                   ),
 
-                  if (_suggestions.isNotEmpty)
+                  if (_loading)
+                    Center(
+                      child: SizedBox(
+                        height: 70,
+                        width: 70,
+                        child: Lottie.asset('assets/lottie/lottie_wait_animation_blue.json'),
+                      ),
+                    ),
+
+                  if (!_loading && _suggestions.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: Column(
