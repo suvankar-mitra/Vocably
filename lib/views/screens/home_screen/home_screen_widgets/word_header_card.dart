@@ -22,29 +22,30 @@ class WordHeaderCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
       child: Container(
-        decoration: isGayThemeOn
-            ? BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.red.shade800,
-                    Colors.orange.shade800,
-                    Colors.yellow.shade800,
-                    Colors.green.shade800,
-                    Colors.blue.shade800,
-                    Colors.indigo.shade800,
-                    Colors.purple.shade800,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+        decoration:
+            isGayThemeOn
+                ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.red.shade800,
+                      Colors.orange.shade800,
+                      Colors.yellow.shade800,
+                      Colors.green.shade800,
+                      Colors.blue.shade800,
+                      Colors.indigo.shade800,
+                      Colors.purple.shade800,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(width: 1.2, color: Colors.transparent),
+                )
+                : BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(width: 1.2, color: theme.primaryColor),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(width: 1.2, color: Colors.transparent),
-              )
-            : BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(width: 1.2, color: theme.primaryColor),
-              ),
         clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -78,7 +79,7 @@ class WordHeaderCard extends StatelessWidget {
                         child: Wrap(
                           spacing: 8.0,
                           runSpacing: 4.0,
-                          alignment: WrapAlignment.start,
+                          alignment: WrapAlignment.center,
                           children: soundTextWidgets,
                         ),
                       ),
