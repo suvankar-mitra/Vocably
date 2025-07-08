@@ -153,6 +153,32 @@ class _HomeSearchBarWidgetState extends State<HomeSearchBarWidget> {
                   ),
 
                   if (_loading)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12.0, left: 12.0),
+                      child: Row(
+                        children: [
+                          // Expanded(child: Divider(thickness: 1)),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Text(
+                              'Search Suggestions',
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              thickness: 1,
+                              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  if (_loading)
                     Center(
                       child: SizedBox(
                         height: 70,
