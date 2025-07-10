@@ -35,7 +35,23 @@ class DictionaryApiService {
   }
 
   Future<WordEntryDTO> getWordOfTheDay() async {
-    return getDefinition('audacity');
+    try {
+      print("DEBUG: Getting word of the day");
+      final response = await _dio.get('/wordoftheday');
+      if (response.statusCode == 200) {
+        print("DEBUG: Successfully fetched definition");
+        WordEntryDTO wdto = WordEntryDTO.fromJson(response.data as Map<String, dynamic>);
+        print("DEBUG: Successfully parsed into WordEntryDTO");
+        return wdto;
+      }
+      return WordEntryDTO();
+    } on DioException {
+      // throw Exception('Failed to fetch definition: ${e.message}');
+      rethrow;
+    } catch (e) {
+      print("DEBUG: Failed to fetch/parse definition: $e");
+      throw Exception('Failed to fetch/parse definition: $e');
+    }
   }
 
   Future<List<String>> getListWordsByFilter(String filter) async {
