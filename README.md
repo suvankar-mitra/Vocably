@@ -7,6 +7,7 @@ Vocably is an English learning application.
 ## Screenshots
 
 <img src="screenshots/Screenshot_20250729_153302.png" alt="Vocably Screenshot" height="400"/>
+<img src="screenshots/Screenshot_20250729_155221.png" alt="Vocably Screenshot" height="400"/>
 
 ## Features
 
