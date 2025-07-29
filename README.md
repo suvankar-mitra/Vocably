@@ -2,7 +2,11 @@
 
 Vocably is an English learning application.
 
-> **Note:** This app is still under development. Features and functionality may change as development progresses.
+> **Note:** This app is still under active development. Features and functionality may change as development progresses.
+
+## Screenshots
+
+<img src="screenshots/Screenshot_20250729_153302.png" alt="Vocably Screenshot" height="400"/>
 
 ## Features
 
